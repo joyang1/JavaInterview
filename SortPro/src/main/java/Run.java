@@ -1,7 +1,4 @@
-import sort.BubbleSort;
-import sort.CountingSort;
-import sort.IArraySort;
-import sort.InsertSort;
+import sort.*;
 
 /**
  * Created by TommyYang on 2018/3/9.
@@ -9,15 +6,29 @@ import sort.InsertSort;
 public class Run {
 
     public static void main(String[] args) {
-        Integer[] arr = {2, 2, -3, 5, 4, 5, 3, 3};
+        int[] arr = new int[]{2, 2, 23, 5, 4, 5, 3, 3};
         IArraySort bubbleSort = new BubbleSort();
         IArraySort countingSort = new CountingSort();
         IArraySort insertSort = new InsertSort();
+        IArraySort selectionSort = new SelectionSort();
+        IArraySort shellSort = new ShellSort();
+        IArraySort mergeSort = new MergeSort();
+        IArraySort quickSort = new QuickSort();
+        IArraySort heapSort = new HeapSort();
+        IArraySort bucketSort = new BucketSort();
+        IArraySort radixSort = new RadixSort();
         try {
-            //Integer[] desArr = bubbleSort.sort(arr);
-            //Integer[] desArr = countingSort.sort(arr);
-            Integer[] desArr = insertSort.sort(arr);
-            System.out.println("冒泡排序结果:");
+            //int[] desArr = bubbleSort.sort(arr);
+            //int[] desArr = countingSort.sort(arr);
+            //int[] desArr = insertSort.sort(arr);
+            //int[] desArr = selectionSort.sort(arr);
+            //int[] desArr = shellSort.sort(arr);
+            //int[] desArr = mergeSort.sort(arr);
+            //int[] desArr = quickSort.sort(arr);
+            //int[] desArr = heapSort.sort(arr);
+            //int[] desArr = bucketSort.sort(arr);
+            int[] desArr = radixSort.sort(arr);
+            System.out.println("排序结果:");
             for (Integer i : desArr) {
                 System.out.print(i);
                 System.out.print("\t");

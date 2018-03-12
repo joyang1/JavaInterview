@@ -11,18 +11,18 @@ import java.util.Arrays;
 public class BubbleSort implements IArraySort {
 
     @Override
-    public Integer[] sort(Integer[] sourArr) throws Exception {
-        //对arr进行拷贝，不改变参数的内容
-        Integer[] desArr = Arrays.copyOf(sourArr, sourArr.length);
+    public int[] sort(int[] sourArr) throws Exception {
+        // 对 sourceArr 进行拷贝，不改变参数内容
+        int[] desArr = Arrays.copyOf(sourArr, sourArr.length);
 
-        for (Integer i = 0; i < desArr.length ; i++){
+        for (int i = 0; i < desArr.length ; i++){
             //设置一个标志，用来判断该数组是否已经有序，提高效率
             Boolean flag = Boolean.TRUE;
 
             //该处一定要是desArr.length - i - 1，切记不能是desArr.length - i
-            for(Integer j = 0; j < desArr.length - i - 1; j ++){
+            for(int j = 0; j < desArr.length - i - 1; j ++){
                 if(desArr[j] > desArr[j+1]){
-                    Integer temp = desArr[j];
+                    int temp = desArr[j];
                     desArr[j] = desArr[j+1];
                     desArr[j+1] = temp;
                     flag = false;

@@ -10,10 +10,10 @@ public interface IArraySort {
      * 对数组进行排序，并返回排序后的数组
      *
      * @param sourArr
-     * @return Interger[]
+     * @return int[]
      * @throws Exception
      */
 
-    Integer[] sort(Integer[] sourArr) throws Exception;
+    int[] sort(int[] sourArr) throws Exception;
 
 }

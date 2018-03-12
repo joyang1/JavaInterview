@@ -8,13 +8,14 @@ import java.util.Arrays;
 public class InsertSort implements IArraySort {
 
     @Override
-    public Integer[] sort(Integer[] sourArr) throws Exception {
-        Integer[] desArr = Arrays.copyOf(sourArr, sourArr.length);
+    public int[] sort(int[] sourArr) throws Exception {
+        // 对 sourceArr 进行拷贝，不改变参数内容
+        int[] desArr = Arrays.copyOf(sourArr, sourArr.length);
 
-        for (Integer i = 1; i < desArr.length ; i++){
-            Integer tmp = desArr[i];
+        for (int i = 1; i < desArr.length ; i++){
+            int tmp = desArr[i];
 
-            Integer j = i;
+            int j = i;
             while (j > 0 && tmp < desArr[j - 1]){
                 desArr[j] = desArr[j - 1];
                 j--;

@@ -12,25 +12,25 @@ import java.util.Arrays;
 public class CountingSort implements IArraySort {
 
     @Override
-    public Integer[] sort(Integer[] sourceArr) throws Exception {
-        // 对 arr 进行拷贝，不改变参数内容
-        Integer[] arr = Arrays.copyOf(sourceArr, sourceArr.length);
+    public int[] sort(int[] sourceArr) throws Exception {
+        // 对 sourceArr 进行拷贝，不改变参数内容
+        int[] arr = Arrays.copyOf(sourceArr, sourceArr.length);
 
-        Integer maxValue = getMaxValue(arr);
+        int maxValue = getMaxValue(arr);
 
         return countingSort(arr, maxValue);
     }
 
-    private Integer[] countingSort(Integer[] arr, Integer maxValue) {
-        Integer bucketLen = maxValue + 1;
+    private int[] countingSort(int[] arr, int maxValue) {
+        int bucketLen = maxValue + 1;
         int[] bucket = new int[bucketLen];
 
-        for (Integer value : arr) {
+        for (int value : arr) {
             bucket[value]++;
         }
 
-        Integer sortedIndex = 0;
-        for (Integer j = 0; j < bucketLen; j++) {
+        int sortedIndex = 0;
+        for (int j = 0; j < bucketLen; j++) {
             while (bucket[j] > 0) {
                 arr[sortedIndex++] = j;
                 bucket[j]--;
@@ -39,9 +39,9 @@ public class CountingSort implements IArraySort {
         return arr;
     }
 
-    private Integer getMaxValue(Integer[] arr) {
-        Integer maxValue = arr[0];
-        for (Integer value : arr) {
+    private int getMaxValue(int[] arr) {
+        int maxValue = arr[0];
+        for (int value : arr) {
             if (maxValue < value) {
                 maxValue = value;
             }

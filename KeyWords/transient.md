@@ -1,3 +1,5 @@
+# 关键字-transient 
+
 ## 介绍
 词义：短暂的
 
@@ -31,14 +33,14 @@ public class RunTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         //write Serializable object to file
         TransientTest test = new TransientTest();
-        FileOutputStream fileOutputStream = new FileOutputStream("D:\\transienttest.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream("KeyWords/res/transienttest.txt");
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(test);
         objectOutputStream.flush();
         objectOutputStream.close();
 
         //get Serializable object from file
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("D:\\transienttest.txt"));
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("KeyWords/res/transienttest.txt"));
         TransientTest transientTest = (TransientTest) objectInputStream.readObject();
         System.out.println("a=" + transientTest.getA() + "\t" +"b=" + transientTest.getB());
     }
@@ -46,6 +48,10 @@ public class RunTest {
 }
 
 ```
+
+## transienttest.txt文件内容
+[transienttest.txt](res/transienttest.txt)
+
 
 ## 结果
 

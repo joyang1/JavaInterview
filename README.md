@@ -8,8 +8,8 @@
 
 同时也欢迎大家fork或star
 
-1.面试之-[排序算法总结](SortPro/README.md)
+1.面试之-[排序算法总结](SortPro)
 
 2.面试之-[Servlet和JSP]()
 
-3.面试之-[关键字总结](KeyWords/README.md)
+3.面试之-[关键字总结](KeyWords)

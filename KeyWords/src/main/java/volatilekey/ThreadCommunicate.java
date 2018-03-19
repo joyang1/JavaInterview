@@ -1,5 +1,7 @@
 package volatilekey;
 
+import java.util.Random;
+
 /**
  * Created by TommyYang on 2018/3/19.
  */
@@ -9,46 +11,48 @@ public class ThreadCommunicate {
 
         private volatile int value;
 
-        private int value1;
+        private volatile int value1;
 
         public void increment(){
-            value++;
-            value1++;
+            value = value + 1;
+            value1 = value;
         }
 
         public void decrement(){
-            value--;
-            value1--;
+            value = value - 1;
+            value1 = value;
+        }
+
+        public int getValue1(){
+            return value1;
         }
 
         public int getValue() {
             return this.value;
         }
-
-        public int getValue1() {
-            return value1;
-        }
     }
 
-    private static Counter counter = new Counter();
+    public static Counter counter = new Counter();
 
      class IncrementTask implements Runnable{
 
         public void run() {
-            for (int i=0; i < 1000; i++){
+            for (int i=0; i < 100000; i++){
                 counter.increment();
+                //System.out.println("increment: "+counter.getValue());
             }
-            System.out.println("increment: "+counter.getValue());
+
         }
     }
 
      class DecrementTask implements Runnable{
 
         public void run() {
-            for (int i=0; i < 1000; i++){
+            for (int i=0; i < 100000; i++){
                 counter.decrement();
+                //System.out.println("decrement: "+counter.getValue());
             }
-            System.out.println("decrement: "+counter.getValue());
+
         }
     }
 

@@ -13,4 +13,5 @@ Cookie机制: 采用的是在客户端保持Http状态的方案。<br/>
 于是就引入了第一种机制:Cookie机制;那么第二种就是Session机制。<br/>
 Session机制：采用的是在服务器端保持Http状态信息的方案。<br/>
 结合两篇博文也可以看出两种机制最明显的区别就是cookie是存储子在客户端,而Session是存储在服务器端。<br/>
+
 [Session详解](http://blog.tommyyang.cn/2017/03/15/Session详解/)

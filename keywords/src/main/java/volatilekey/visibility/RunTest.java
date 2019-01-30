@@ -1,10 +1,11 @@
-package volatilekey;
+package volatilekey.visibility;
 
 /**
  * @author TommyYang on 2019/1/29
  */
-public class VoatileTest extends Thread {
+public class RunTest extends Thread {
 
+    //volatile保证线程的可见性
     //private volatile boolean isRunning = true;
     private boolean isRunning = true;
 
@@ -24,7 +25,7 @@ public class VoatileTest extends Thread {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        VoatileTest voatileTest = new VoatileTest();
+        RunTest voatileTest = new RunTest();
         voatileTest.start();
 
         Thread.sleep(1000);

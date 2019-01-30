@@ -1,6 +1,4 @@
-package volatilekey;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package volatilekey.unsafe;
 
 /**
  * Created by TommyYang on 2018/3/19.

@@ -1,6 +1,4 @@
-package volatilekey;
-
-import sun.misc.Unsafe;
+package volatilekey.unsafe;
 
 /**
  * Created by TommyYang on 2018/3/19.

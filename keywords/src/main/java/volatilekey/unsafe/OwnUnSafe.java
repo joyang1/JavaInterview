@@ -1,4 +1,4 @@
-package volatilekey;
+package volatilekey.unsafe;
 
 import sun.misc.Unsafe;
 

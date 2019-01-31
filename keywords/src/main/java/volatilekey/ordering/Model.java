@@ -5,14 +5,9 @@ package volatilekey.ordering;
  */
 public class Model {
 
-    private volatile int a = 10;
-
-    public int getA() {
-        return a;
-    }
-
-    public void setA(int a) {
-        this.a = a;
-    }
+    public volatile static int a = 10;
+    public static int b = 1;
+    public static int c = 2;
+    public static int d = 3;
 
 }

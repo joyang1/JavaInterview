@@ -5,19 +5,16 @@ package volatilekey.ordering;
  */
 public class AThread implements Runnable {
 
-    private Model model;
-
-    public AThread(Model model) {
-        this.model = model;
-    }
-
     public void run() {
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        model.setA(11);
+        System.out.println("in a thread1");
+        Model.b = 4;
+        System.out.println("in a thread2");
+        Model.c = 5;
+        System.out.println("in a thread3");
+        Model.a = 11;
+        System.out.println("in a thread4");
+        Model.d = 6;
+        System.out.println("in a thread5");
     }
 
 }

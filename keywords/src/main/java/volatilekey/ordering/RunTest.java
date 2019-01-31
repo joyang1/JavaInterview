@@ -7,21 +7,15 @@ public class RunTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        for(int i = 0; i < 20; i++){
-            Model m = new Model();
-            Thread at = new Thread(new AThread(m));
 
-            Thread bt = new Thread(new BThread(m));
+        Thread at = new Thread(new AThread());
+        Thread bt = new Thread(new BThread());
 
-            at.start();
-            bt.start();
+        bt.start();
+        at.start();
 
-            System.out.println("main:" + m.getA());
-
-//            bt.join();
-//            at.join();
-
-        }
+        bt.join();
+        at.join();
 
 
     }

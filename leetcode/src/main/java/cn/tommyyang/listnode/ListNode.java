@@ -1,4 +1,4 @@
-package linknode;
+package cn.tommyyang.listnode;
 
 /**
  * @author TommyYang on 2019-03-20

@@ -13,6 +13,8 @@
         <module>KeyWords</module>
         <module>Web</module>
         <module>Lock</module>
+        <module>bigdata</module>
+        <module>leetcode</module>
     </modules>
 
 

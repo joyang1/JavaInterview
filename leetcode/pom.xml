@@ -9,15 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lock</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>cn.tommyyang</groupId>
-            <artifactId>keywords</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <artifactId>leetcode</artifactId>
 
 
 </project>

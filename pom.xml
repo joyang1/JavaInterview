@@ -15,6 +15,7 @@
         <module>Lock</module>
         <module>bigdata</module>
         <module>leetcode</module>
+        <module>io</module>
     </modules>
 
 

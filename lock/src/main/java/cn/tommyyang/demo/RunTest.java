@@ -6,6 +6,7 @@ import cn.tommyyang.demo.lock.ReentrantLockDemo;
 import cn.tommyyang.demo.lock.SynchronizedDemo;
 import volatilekey.unsafe.Counter;
 
+import java.util.concurrent.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
@@ -30,12 +31,15 @@ public class RunTest {
     }
 
 
-    public static void runSynchronizedP_C_Demo(){
-        Thread t1 = new Thread(new Producer());
-        Thread t2 = new Thread(new Producer());
 
-        Thread c1 = new Thread(new Consumer());
-        Thread c2 = new Thread(new Consumer());
+    public static void runSynchronizedP_C_Demo(){
+        Producer pro = new Producer();
+        Consumer con = new Consumer();
+        Thread t1 = new Thread(pro);
+        Thread t2 = new Thread(pro);
+
+        Thread c1 = new Thread(con);
+        Thread c2 = new Thread(con);
 
         t1.start();
         t2.start();
@@ -47,19 +51,23 @@ public class RunTest {
     }
 
     public static void runReentrantLockP_C_Demo(){
-        ReentrantLock lock = new ReentrantLock(true);
+        ReentrantLock lock = new ReentrantLock();
         Condition cCondition = lock.newCondition();
-        Thread t1 = new Thread(new Producer(lock, cCondition));
-        Thread t2 = new Thread(new Producer(lock, cCondition));
+        Condition pCondition = lock.newCondition();
+        Producer pro = new Producer(lock, cCondition, pCondition);
+        Thread t1 = new Thread(pro);
+        Thread t2 = new Thread(pro);
 
-        Thread c1 = new Thread(new Consumer(lock, cCondition));
-        Thread c2 = new Thread(new Consumer(lock, cCondition));
+        Consumer con = new Consumer(lock, cCondition, pCondition);
+        Thread c1 = new Thread(con);
+        Thread c2 = new Thread(con);
 
         t1.start();
         t2.start();
 
         c1.start();
         c2.start();
+
 
 
     }

@@ -10,19 +10,26 @@ public class Consumer implements Runnable {
 
     private ReentrantLock lock;
     private Condition cCondition;
+    private Condition pCondition;
 
     public Consumer() {
     }
 
-    public Consumer(ReentrantLock lock, Condition cCondition) {
+    public Consumer(ReentrantLock lock, Condition cCondition, Condition pCondition) {
         this.lock = lock;
         this.cCondition = cCondition;
+        this.pCondition = pCondition;
     }
 
     public void consume1() throws InterruptedException {
         synchronized (Producer.data) {
+            while (!Producer.flag){
+                System.out.println("进入Consumer wait");
+                Producer.data.wait();
+            }
             this.consume();
-            Producer.data.wait();
+            Producer.flag = false;
+            Producer.data.notifyAll();
         }
 
     }
@@ -30,8 +37,13 @@ public class Consumer implements Runnable {
     public void consume2() throws InterruptedException {
         try {
             this.lock.lock();
+            while (!Producer.flag){
+                System.out.println("进入Consumer await");
+                this.cCondition.await();
+            }
             this.consume();
-            this.cCondition.signalAll();
+            Producer.flag = false;
+            this.pCondition.signalAll();
         }  finally {
             this.lock.unlock();
         }
@@ -51,10 +63,11 @@ public class Consumer implements Runnable {
     }
 
     public void run() {
+
         for (; ; ) {
             try {
-                //this.consume1();
-                this.consume2();
+                this.consume1();
+                //this.consume2();
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }

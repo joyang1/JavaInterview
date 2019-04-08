@@ -27,7 +27,7 @@ public class MergeTwoSortListNode {
         }
     }
 
-    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) throws InterruptedException {
+    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 //        if(l1 == null){
 //            return l2;
 //        }
@@ -69,8 +69,6 @@ public class MergeTwoSortListNode {
         if(l2 == null){
             return l1;
         }
-
-        Thread.sleep(10000);
 
         if(l1.val <= l2.val){
             l1.next = mergeTwoLists(l1.next, l2);

@@ -16,6 +16,8 @@
         <module>bigdata</module>
         <module>leetcode</module>
         <module>io</module>
+        <module>test</module>
+        <module>dataDesign</module>
     </modules>
 
 

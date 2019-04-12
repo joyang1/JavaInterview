@@ -10,6 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bigdata</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>7</source>
+                    <target>7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <repositories>
@@ -29,7 +41,7 @@
         <dependency>
             <groupId>com.jianshu.qian</groupId>
             <artifactId>qian-core</artifactId>
-            <version>1.12.0</version>
+            <version>1.16.0</version>
         </dependency>
 
         <dependency>

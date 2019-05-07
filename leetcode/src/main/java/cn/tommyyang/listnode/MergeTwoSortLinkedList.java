@@ -3,7 +3,7 @@ package cn.tommyyang.listnode;
 /**
  * @author TommyYang on 2019-03-20
  */
-public class MergeTwoSortListNode {
+public class MergeTwoSortLinkedList {
 
     public static void main(String[] args) throws InterruptedException {
         ListNode node1 = new ListNode(1);

@@ -4,7 +4,7 @@ package cn.tommyyang.listnode;
  * @author TommyYang on 2019-05-04
  */
 //反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
-public class ReverseListNode2 {
+public class ReverseLinkedList2 {
 
     public ListNode reverseBetween(ListNode head, int m, int n) {
 

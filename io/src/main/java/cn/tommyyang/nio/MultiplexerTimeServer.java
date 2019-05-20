@@ -105,7 +105,7 @@ public class MultiplexerTimeServer implements Runnable{
                 buf.get(bytes);
                 String body = new String(bytes, "UTF-8");
                 String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body)
-                        ? new Date(System.currentTimeMillis()).toString()
+                        ? new Date().toString()
                         : "ERROR ORDER";
                 doWrite(sc, currentTime);
             } else if (size < 0){

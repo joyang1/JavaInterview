@@ -15,6 +15,6 @@ public class TimeClient {
             }
         }
         for(int i = 0; i < 10; i++)
-            new Thread(new TimeClientHandler("127.0.0.1", port), "TimeClient-001").start();
+            new Thread(new TimeClientHandler("127.0.0.1", port), "NIO-TimeClient-001").start();
     }
 }

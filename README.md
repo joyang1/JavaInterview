@@ -8,10 +8,10 @@
 
 同时也欢迎大家fork或star
 
-1.面试之-[排序算法总结](SortPro)
+1.面试之-[排序算法总结](https://github.com/joyang1/JavaInterview/tree/master/sortpro)
 
 2.面试之-[Servlet和JSP]()
 
-3.面试之-[Cookie和Session详解](Web)
+3.面试之-[Cookie和Session详解](https://github.com/joyang1/JavaInterview/tree/master/web)
 
-4.面试之-[关键字总结](KeyWords)
+4.面试之-[关键字总结](https://github.com/joyang1/JavaInterview/tree/master/keywords)

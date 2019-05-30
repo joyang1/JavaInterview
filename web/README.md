@@ -8,7 +8,7 @@
 于是就引入了第一种机制:Cookie机制。<br/>
 Cookie机制: 采用的是在客户端保持Http状态的方案。<br/>
 
-[Cookie详解](http://blog.tommyyang.cn/2017/03/13/Cookie%E8%AF%A6%E8%A7%A3/)
+[Cookie详解](http://blog.tommyyang.cn/2017/03/13/Cookie详解-2017/)
 
 ## Session由来
 上面介绍了Cookie的相关知识，其中介绍了必须采用一种机制来唯一标识一个用户，同时记录该用户的状态。 <br/>
@@ -16,4 +16,4 @@ Cookie机制: 采用的是在客户端保持Http状态的方案。<br/>
 Session机制：采用的是在服务器端保持Http状态信息的方案。<br/>
 结合两篇博文也可以看出两种机制最明显的区别就是cookie是存储子在客户端,而Session是存储在服务器端。<br/>
 
-[Session详解](http://blog.tommyyang.cn/2017/03/15/Session详解/)
+[Session详解](http://blog.tommyyang.cn/2017/03/15/Session详解-2017/)

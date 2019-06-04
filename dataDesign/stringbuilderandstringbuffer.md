@@ -80,8 +80,10 @@ private int hugeCapacity(int minCapacity) {
 ```
 
 扩容的方法最终由 `newCapacity()`  实现的，首先将容量左移一位（即扩大2倍）同时加2，如果此时任小于指定的容量，
-那么就将容量设置为 `minimumCapacity` 。然后判断是否溢出，通过 `hugeCapacity` 实现，如果溢出了，
-则将容量设置为 `Integer.MAX_VALUE - 8`。最后将 `value`  值进行拷贝，这一步显然是最耗时的操作。
+那么就将容量设置为 `minimumCapacity` 。
+然后判断是否溢出，通过 `hugeCapacity` 实现，如果溢出了（长度大于 `Integer.MAX_VALUE` ），则抛错（ `OutOfMemoryError` ）；
+否则根据 `minCapacity` 和 `Integer.MAX_VALUE - 8` 的大小比较确定数组容量为 `max(minCapacity, Integer.MAX_VALUE - 8)`。
+最后将 `value`  值进行拷贝，这一步显然是最耗时的操作。
 
 #### append() 方法
 

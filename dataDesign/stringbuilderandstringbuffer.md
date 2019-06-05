@@ -1,4 +1,5 @@
 # StringBuffer 和 StringBuilder
+
 ## 介绍
 大多数情况下， StringBuffer 的速度要比 String 快； StringBuilder  要比StringBuffer快；
 StringBuffer 和 StringBuilder 都是 AbstractStringBuilder 的子类，区别在于StringBuffer

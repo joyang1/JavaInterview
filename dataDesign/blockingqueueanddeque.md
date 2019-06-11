@@ -1,4 +1,4 @@
-# ArrayBlockingQueue、 LinkedBlockingQueue、 LinkedBlockingDeque 和 ConcurrentLinkedQueue
+# BlockingQueue 和 BlockingDeque
 
 ## BlockingQueue 介绍
 `BlockingQueue` 继承自  `Queue` 接口,下面看看阻塞队列提供的接口；
@@ -75,21 +75,30 @@ public interface BlockingQueue<E> extends Queue<E> {
 ```
 
 - 插入方法
+
 `add(E e)`: 添加成功返回true，失败抛IllegalStateException异常
+
 `offer(E e)`: 成功返回 true，如果此队列已满，则返回 false。
+
 `put(E e)`: 将元素插入此队列的尾部，如果该队列已满，则一直阻塞
 
 - 删除方法
+
 `remove(Object o)`: 移除指定元素,成功返回true，失败返回false
+
 `poll()`: 获取并移除此队列的头元素，若队列为空，则返回 null
+
 `take()`: 获取并移除此队列的头元素，若队列为空，则一直阻塞
 
 - 检查方法
+
 `peek()`: 获取但不移除此队列的头元素，没有元素则抛NoSuchElementException异常
+
 `element()`: 获取但不移除此队列的头；若队列为空，则返回 null。
 
 ## ArrayBlockingQueue
-
+ArrayBlockingQueue是一个用数组实现的有界阻塞队列，内部按先进先出的原则对元素进行排序；
+其中 `put` 方法和 `take` 方法为添加和删除元素的阻塞方法。
 
 ## LinkedBlockingQueue
 

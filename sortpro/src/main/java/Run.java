@@ -14,6 +14,7 @@ public class Run {
         IArraySort shellSort = new ShellSort();
         IArraySort mergeSort = new MergeSort();
         IArraySort quickSort = new QuickSort();
+        IArraySort quickSort1 = new QuickSort1();
         IArraySort heapSort = new HeapSort();
         IArraySort bucketSort = new BucketSort();
         IArraySort radixSort = new RadixSort();
@@ -27,7 +28,7 @@ public class Run {
             //int[] desArr = quickSort.sort(arr);
             //int[] desArr = heapSort.sort(arr);
             //int[] desArr = bucketSort.sort(arr);
-            int[] desArr = radixSort.sort(arr);
+            int[] desArr = quickSort1.sort(arr);
             System.out.println("排序结果:");
             for (Integer i : desArr) {
                 System.out.print(i);

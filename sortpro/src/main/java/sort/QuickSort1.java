@@ -1,9 +1,11 @@
 package sort;
 
+import java.util.Arrays;
+
 /**
  * @author TommyYang on 2019-04-12
  */
-public class QuickSort1 {
+public class QuickSort1 implements IArraySort {
 
     public void quickSort(int[] arr, int left, int right) {
 
@@ -43,4 +45,13 @@ public class QuickSort1 {
 
     }
 
+    @Override
+    public int[] sort(int[] sourArr) throws Exception {
+        // 对 arr 进行拷贝，不改变参数内容
+        int[] arr = Arrays.copyOf(sourArr, sourArr.length);
+
+        quickSort(arr, 0, arr.length - 1);
+
+        return arr;
+    }
 }

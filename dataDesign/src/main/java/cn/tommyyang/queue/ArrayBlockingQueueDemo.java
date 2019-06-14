@@ -21,8 +21,8 @@ public class ArrayBlockingQueueDemo {
 
     public static void main(String[] args) {
         THREAD_POOL.execute(new Producer(QUEUE));
-        THREAD_POOL.execute(new Producer(QUEUE));
         THREAD_POOL.execute(new Consumer(QUEUE));
+        THREAD_POOL.execute(new Producer(QUEUE));
         THREAD_POOL.execute(new Consumer(QUEUE));
         THREAD_POOL.shutdown();
     }

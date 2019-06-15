@@ -10,3 +10,8 @@
 --------
 [详细介绍](stringbuilderandstringbuffer.md)
 
+## BlockingQueue
+
+--------
+[详细介绍](blockingqueueanddeque.md)
+

@@ -206,7 +206,26 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
 件对象的单链表中(会在 Lock 章节中 Condition 分析中进行整理)，同时当队列中有数据后会通过 `notEmpty` 条件对象
 唤醒链表中等待的线程(第一个加入链表的线程)去 take 数据。对于 `notFull` 条件对象是用于存放等待调用(此时队列容量已满) put 方法
 的线程，这些线程会加入到 `notFull` 条件对象的单链表中，同时当队列中数据被消费后会通过 `notFull` 条件对象唤醒链表中
-等待的线程去 put 数据。
+等待的线程去 put 数据。takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，putIndex 表示
+的是下一个(put、offer、add)被调用时添加元素的索引。
+
+#### 添加(阻塞添加)的实现分析
+``` java
+/**
+ * Inserts element at current put position, advances, and signals.
+ * Call only when holding lock.
+ */
+private void enqueue(E x) {
+    // assert lock.getHoldCount() == 1;
+    // assert items[putIndex] == null;
+    final Object[] items = this.items;
+    items[putIndex] = x;
+    if (++putIndex == items.length)
+        putIndex = 0;
+    count++;
+    notEmpty.signal();
+}
+```
 
 
 ## LinkedBlockingQueue

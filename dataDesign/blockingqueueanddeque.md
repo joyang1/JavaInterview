@@ -1,4 +1,4 @@
-# BlockingQueue 和 BlockingDeque
+# BlockingQueue 和 BlockingDeque 内部实现分析
 
 ## BlockingQueue 介绍
 `BlockingQueue` 继承自  `Queue` 接口,下面看看阻塞队列提供的接口；
@@ -104,10 +104,11 @@ ArrayBlockingQueue 实现的生产者消费者的 Demo，代码只是一个简�
 使用，Consumer 消费者和 Producer 生产者通过 ArrayBlockingQueue 来获取（take）和添加（put）
 数据。具体代码请访问：[ABQ demo](https://github.com/joyang1/JavaInterview/blob/master/dataDesign/src/main/java/cn/tommyyang/queue/ArrayBlockingQueueDemo.java)。
 
-ArrayBlockingQueue 内部的阻塞队列是通过 ReentrantLock 和 Condition 条件队列实现的，所以 ArrayBlockingQueue 中
-的元素存在公平和非公平访问的区别，这是因为 ReentrantLock 里面存在公平锁和非公平锁的原因，ReentrantLock 的具体分析会
-在 Lock 章节进行具体分析的； 对于 Lock 是公平锁的时候，则被阻塞的队列可以按照阻塞的先后顺序访问队列，Lock 是非公平锁的
-时候，阻塞的线程将进入争夺锁资源的过程中，谁先抢到锁就可以先执行，没有固定的先后顺序。 
+ArrayBlockingQueue 内部的阻塞队列是通过 ReentrantLock 和 Condition 条件队列实现的，
+所以 ArrayBlockingQueue 中的元素存在公平和非公平访问的区别，这是因为 ReentrantLock 里面存在公平锁和非公平锁的原因，
+ReentrantLock 的具体分析会在 Lock 章节进行具体分析的； 对于 Lock 是公平锁的时候，
+则被阻塞的队列可以按照阻塞的先后顺序访问队列，Lock 是非公平锁的时候，
+阻塞的线程将进入争夺锁资源的过程中，谁先抢到锁就可以先执行，没有固定的先后顺序。 
 
 下面对 ArrayBlockingQueue 构造方法进行分析：
 ``` java
@@ -200,33 +201,124 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
 
 ```
 
-从上面成员变量中可以看出，内部使用数组对象 items 来存储所有的数据；通过同一个 ReentrantLock 来同时
-控制添加数据线程和移除数据线程的并发访问，这个与 LinkedBlockingQueue 有很大区别(下面会进行分析)。
-对于 `notEmpty` 条件对象是用于存放等待调用(此时队列中没有数据) take 方法的线程，这些线程会加入到 `notEmpty` 条
-件对象的单链表中(会在 Lock 章节中 Condition 分析中进行整理)，同时当队列中有数据后会通过 `notEmpty` 条件对象
-唤醒链表中等待的线程(第一个加入链表的线程)去 take 数据。对于 `notFull` 条件对象是用于存放等待调用(此时队列容量已满) put 方法
-的线程，这些线程会加入到 `notFull` 条件对象的单链表中，同时当队列中数据被消费后会通过 `notFull` 条件对象唤醒链表中
-等待的线程去 put 数据。takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，putIndex 表示
-的是下一个(put、offer、add)被调用时添加元素的索引。
+从上面成员变量中可以看出，内部使用数组对象 items 来存储所有的数据；
+通过同一个 ReentrantLock 来同时控制添加数据线程和移除数据线程的并发访问，
+这个与 LinkedBlockingQueue 有很大区别(下面会进行分析)。
+对于 `notEmpty` 条件对象是用于存放等待调用(此时队列中没有数据) take 方法的线程，
+这些线程会加入到 `notEmpty` 条件对象的等待队列(单链表)中，
+同时当队列中有数据后会通过 `notEmpty` 条件对象唤醒等待队列(链表)中等待的线程(链表中第一个***non-null 且 status 为 Condition*** 的线程)去 take 数据。
+对于 `notFull` 条件对象是用于存放等待调用(此时队列容量已满) put 方法的线程，
+这些线程会加入到 `notFull` 条件对象的等待队列(单链表)中，同时当队列中数据被消费后会通过 `notFull` 条件对象唤醒等待队列(链表)中等待的线程去 put 数据。
+takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，
+putIndex 表示的是下一个(put、offer、add)被调用时添加元素的索引。 
+数据出队、入队操作如下：
+<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq1.png">
 
 #### 添加(阻塞添加)的实现分析
 ``` java
 /**
- * Inserts element at current put position, advances, and signals.
- * Call only when holding lock.
+ * 在当前 put 位置插入数据，put 位置前进一位，
+ * 同时信号提醒 notEmpty 条件对象链表中第一个线程去 take 数据。
+ * 当然这一系列动作只有该线程获取锁的时候才能进行，即只有获取锁的线程
+ * 才能执行 enqueue 操作。
  */
+// 元素统一入队操作
 private void enqueue(E x) {
     // assert lock.getHoldCount() == 1;
     // assert items[putIndex] == null;
     final Object[] items = this.items;
-    items[putIndex] = x;
-    if (++putIndex == items.length)
+    items[putIndex] = x; // putIndex 位置添加数据
+    //putIndex 进行自增，当达到数组长度的时候，putIndex 重头再来，即设置为0
+    //为什么呢？下面会具体介绍 
+    if (++putIndex == items.length) 
         putIndex = 0;
-    count++;
-    notEmpty.signal();
+    count++; //元素个数自增
+    notEmpty.signal(); //唤醒 notEmpty 条件对象等待队列(链表)中第一个线程去 take 数据
+}
+
+public boolean offer(E e) {
+    checkNotNull(e);
+    final ReentrantLock lock = this.lock;
+    // 获取锁，保证线程安全
+    lock.lock();
+    try {
+        // 当数组元素个数已满时，直接返回false
+        if (count == items.length)
+            return false;
+        else {
+            // 执行入队操作，enqueue 方法在上面分析了
+            enqueue(e);
+            return true;
+        }
+    } finally {
+        // 释放锁，保证其他等待锁的线程可以获取到锁
+        // 为什么放到 finally (避免死锁)
+        lock.unlock();
+    }
+}
+
+// add 方法其实就是调用了 offer 方法来实现，
+// 与 offer 方法的区别就是 offer 方法数组满，抛出 IllegalStateException 异常。
+public boolean add(E e) {
+    if (offer(e))
+        return true;
+    else
+        throw new IllegalStateException("Queue full");
+}
+
+```
+
+offer 方法和 add 方法实现很简单，大家只需要知道其区别就好了；
+这里着重讲一下 enqueue 方法里面留下的疑问，为什么当 putIndex 到了数组最后一个元素之后，
+是重头再来，设置为0；首先，你要想到 ArrayBlockingQueue 整个入队和出队操作都是线程安全的，
+而且 ArrayBlockingQueue 也是先进先出的队列；
+所以想一想，是不是数据入队后，从第一个数组位置上开始添加数据，依次往后入队；
+数据出队也是从数组第一个位置出队，出队后该位置数据为空，依次出队，然后这些位置数据都为空；
+所以只要 count 的个数没有达到数组长度时，虽然 putIndex 达到了数组长度，
+说明数组前面的位置上已经有数据出队了，所以添加元素，是不是就从头开始就行了。(想明白了其实就很简单了，哈哈)
+因为我们有一个 count 成员变量来记录元素的个数，当队列已满时，
+put 操作是会阻塞，add 操作会抛出异常，offer 操作会直接返回false；
+因此我们也不用担心数据会覆盖。这个 putIndex 和 takeIndex 达到数据长度后都会重新设置为0，
+重头开始再获取数据，整个过程就是一个无限循环的过程。 
+通过分析，我们发现有添加操作是不是有两种场景，一个是直接往后添加，一个是达到数据长度后，需要重头再来，
+具体操作如下图：
+<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq2.png">
+
+下面看看阻塞添加方法(put)
+
+``` java
+/**
+ * 插入数据到队列尾部，如果队列已满，阻塞等待空间
+ */
+public void put(E e) throws InterruptedException {
+    checkNotNull(e);
+    final ReentrantLock lock = this.lock;
+    // 获取锁，期间线程可以打断，打断则不会添加
+    lock.lockInterruptibly();
+    try {
+        // 通过上述分析，我们通过 count 来判断数组中元素个数
+        while (count == items.length)
+            notFull.await(); // 元素已满，线程挂起，线程加入 notFull 条件对象等待队列(链表)中，等待被唤醒
+        enqueue(e); // 队列未满，直接执行入队操作
+    } finally {
+        lock.unlock();
+    }
 }
 ```
 
+通过源码分析，发现 offer, add 都是无阻塞添加方法，两者的具体区别在上面分析过了；
+而 put 方法确实是一个阻塞方法，当队列已满的时候，线程会挂起，
+然后将该线程加入到 notFull 条件对象的等待队列(链表)中；
+notFull 条件对象有两种情况，第一种是当队列已满，新来的 put 数据的线程会加入到其等待队列(链表)中，
+第二种情况是，当队列有空间时，会移除队列中的线程，移除成功同时唤醒 put 线程，加入到获取 lock 的等待队列(双链表)的尾部；
+具体操作，如下图：
+<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq3.png">
+
+通过以上分析，ArrayBlockingQueue 的 offer、 add、 put 方法已经都详细分析完毕，希望大家可以对其有深入的了解。
+
+#### 获取(阻塞获取)的实现分析
+
+获取即移除数组中的元素。
 
 ## LinkedBlockingQueue
 

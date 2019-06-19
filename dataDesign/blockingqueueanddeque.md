@@ -218,7 +218,7 @@ putIndex 表示的是下一个(put、offer、add)被调用时添加元素的索�
 ``` java
 /**
  * 在当前 put 位置插入数据，put 位置前进一位，
- * 同时信号提醒 notEmpty 条件对象链表中第一个线程去 take 数据。
+ * 同时唤醒 notEmpty 条件对象等待队列(链表)中第一个可用线程去 take 数据。
  * 当然这一系列动作只有该线程获取锁的时候才能进行，即只有获取锁的线程
  * 才能执行 enqueue 操作。
  */
@@ -233,9 +233,10 @@ private void enqueue(E x) {
     if (++putIndex == items.length) 
         putIndex = 0;
     count++; //元素个数自增
-    notEmpty.signal(); //唤醒 notEmpty 条件对象等待队列(链表)中第一个线程去 take 数据
+    notEmpty.signal(); //添加完数据后，说明数组中有数据了，所以可以唤醒 notEmpty 条件对象等待队列(链表)中第一个可用线程去 take 数据
 }
 
+// 添加数据，数组中元素已满时，直接返回 false。
 public boolean offer(E e) {
     checkNotNull(e);
     final ReentrantLock lock = this.lock;
@@ -316,9 +317,107 @@ notFull 条件对象有两种情况，第一种是当队列已满，新来的 pu
 
 通过以上分析，ArrayBlockingQueue 的 offer、 add、 put 方法已经都详细分析完毕，希望大家可以对其有深入的了解。
 
-#### 获取(阻塞获取)的实现分析
+#### 提取(阻塞提取)的实现分析
 
-获取即移除数组中的元素。
+提取即移除数组中的元素，下面我们具体来分析 ArrayBlockingQueue 的提取数组中元素的操作。
+同上分析，我们首先从 dequeue 方法分析开始。
+
+``` java
+/**
+ * 提取 takeIndex 位置上的元素， 然后 takeIndex 前进一位，
+ * 同时唤醒 notFull 等待队列(链表)中的第一个可用线程去 put 数据。
+ * 这些操作都是在当前线程获取到锁的前提下进行的，
+ * 同时也说明了 dequeue 方法线程安全的。
+ */
+private E dequeue() {
+    // assert lock.getHoldCount() == 1;
+    // assert items[takeIndex] != null;
+    final Object[] items = this.items; 
+    @SuppressWarnings("unchecked")
+    E x = (E) items[takeIndex]; // 提取 takeIndex位置上的数据
+    items[takeIndex] = null; // 同时清空数组在 takeIndex 位置上的数据
+    // takeIndex 向前前进一位，如果前进后位置超过了数组的长度，则将其设置为0；
+    // 为什么设置为0，理由在 putIndex 设置为0的时候介绍过了，原因是一样的。
+    if (++takeIndex == items.length) 
+        takeIndex = 0;
+    count--; // 同时数组的元素个数进行减1
+    if (itrs != null)
+        itrs.elementDequeued(); // 同时更新迭代器中的元素，迭代器的具体分析会在下面单独整理
+    notFull.signal(); // 提取完数据后，说明数组中有空位，所以可以唤醒 notFull 条件对象的等待队列(链表)中的第一个可用线程去 put 数据
+    return x;
+}
+
+// 提取数据，数组中数据为空时，直接返回 null
+public E poll() {
+    final ReentrantLock lock = this.lock;
+    lock.lock(); // 加锁，前面也分析过，要执行 dequeue操作时，当前线程必须获取锁，保证线程安全
+    try {
+        return (count == 0) ? null : dequeue(); // 元素个数为0时，直接返回 null，不为0时，元素出队
+    } finally {
+        // 释放锁，在 finally 中释放可以避免死锁
+        lock.unlock();
+    }
+}
+
+```
+
+上面 poll() 方法分析得很清晰了，内部通过 dequeue 删除队列头元素。下面分析下 peek 方法，与 poll 有较大的区别。
+
+``` java
+
+// 返回数组上第 i 个元素
+final E itemAt(int i) {
+    return (E) items[i];
+}
+
+/**
+ * 通过代码可以看到，peek 是获取元素，而不是提取， 不会删除 takeIndex 位置上的数据。
+ * 内部通过 itemAt 方法实现，而不是 dequeue 方法。
+ */
+public E peek() {
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+     return itemAt(takeIndex); //当队列为空时，返回 null
+    } finally {
+     lock.unlock();
+    }
+}
+
+```
+
+通过上述代码，可以看出 peek 和 poll 的区别，peek 是获取元素，不会删除 takeIndex 位置原有的数据，
+takeIndex 也不会向前前进一位。
+
+下面来分析下阻塞提取 take 方法：
+
+``` java
+// 从队列头部提取数据，队列中没有元素则阻塞，阻塞期间线程可中断
+public E take() throws InterruptedException {
+    final ReentrantLock lock = this.lock;
+    lock.lockInterruptibly(); //获取锁，期间线程可以打断，打断则不会提取
+    try {
+        // 元素为0时，当有线程提取元素，则将该线程加入到 notEmpty 条件对象的等待队列中，
+        // 直到当队列中有数据之后，会唤醒该线程去提取数据。
+        while (count == 0)
+            notEmpty.await();
+        return dequeue(); // 若有数据，直接调用 dequeue 提取数据
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+其实分析完阻塞添加 put 方法后，再来看 take 方法，发现也是非常简单的，队列中有元素，直接提取，
+没有元素则线程阻塞(可中断的阻塞)，将该线程加入到 notEmpty 条件对象的等待队列中；
+等有新的 put 线程添加了数据，分析发现，会在 put 操作中唤醒 notEmpty 条件对象的等待队列中的 take 线程，
+去执行 take 操作。具体操作如下图：
+<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq3.png">
+
+通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，
+根据具体的场景使用具体的方法。
+
+分析完提取方法后，我们来分析一下 ArrayBlockingQueue 中的删除元素的方法。
 
 ## LinkedBlockingQueue
 

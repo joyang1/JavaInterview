@@ -25,7 +25,7 @@ public class BigFileTool {
 
             String[] valArr = values.split(" ");
             for (String val : valArr){
-                int code = Math.abs(val.hashCode()) % 10;
+                int code = Math.abs(val.hashCode()) & 15;
                 String txtName = "sink-" + code + ".txt";
                 String sinkPath = sinkDir + txtName;
                 writeContent(sinkPath, Charset.forName("utf-8").encode(val + System.lineSeparator()));

@@ -1,6 +1,5 @@
 package cn.tommyyang.bigfile;
 
-import cn.tommyyang.bigfile.Utils.BigFileTool;
 import cn.tommyyang.bigfile.fileservice.FileService;
 
 import java.io.IOException;

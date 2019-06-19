@@ -1,4 +1,4 @@
-package cn.tommyyang.bigfile.Utils;
+package cn.tommyyang.bigfile.utils;
 
 import java.io.*;
 import java.nio.ByteBuffer;

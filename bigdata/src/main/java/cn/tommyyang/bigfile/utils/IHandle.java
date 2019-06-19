@@ -1,4 +1,4 @@
-package cn.tommyyang.bigfile.Utils;
+package cn.tommyyang.bigfile.utils;
 
 /**
  * @author TommyYang on 2019-04-12

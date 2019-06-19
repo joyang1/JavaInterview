@@ -412,7 +412,7 @@ public E take() throws InterruptedException {
 没有元素则线程阻塞(可中断的阻塞)，将该线程加入到 notEmpty 条件对象的等待队列中；
 等有新的 put 线程添加了数据，分析发现，会在 put 操作中唤醒 notEmpty 条件对象的等待队列中的 take 线程，
 去执行 take 操作。具体操作如下图：
-<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq3.png">
+<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq4.png">
 
 通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，
 根据具体的场景使用具体的方法。

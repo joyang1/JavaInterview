@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author TommyYang on 2019-05-19
  */
-//求两个数组的交集
+//求两个数组的交集(https://leetcode-cn.com/problems/intersection-of-two-arrays/)
 public class InterSection {
 
     //暂时没想到更好的解法，感觉解法效率有待提高。

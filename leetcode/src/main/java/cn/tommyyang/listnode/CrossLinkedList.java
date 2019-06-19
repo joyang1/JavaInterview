@@ -4,14 +4,11 @@ package cn.tommyyang.listnode;
  * @author TommyYang on 2019-03-25
  */
 
-//相交链表题目
+//相交链表题目(https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
 public class CrossLinkedList {
 
     //找到两个单链表相交的起始节点，返回相交的链表
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null){
-            return null;
-        }
 
         ListNode first = headA;
         ListNode second = headB;

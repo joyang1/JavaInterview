@@ -3,14 +3,10 @@ package cn.tommyyang.listnode;
 /**
  * @author TommyYang on 2019-05-06
  */
-//环形链表2
+//环形链表2(https://leetcode-cn.com/problems/linked-list-cycle-ii/)
 public class CycleNode2 {
 
     public ListNode detectCycle(ListNode head) {
-        if (head == null || head.next == null){
-            return null;
-        }
-
         ListNode fast = head;
         ListNode slow = head;
         boolean meet = false;

@@ -212,7 +212,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
 takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，
 putIndex 表示的是下一个(put、offer、add)被调用时添加元素的索引。 
 数据出队、入队操作如下：
-<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq1.png">
+<img src="https://blog.tommyyang.cn/img/java/datastructure/abq1.png">
 
 #### 添加(阻塞添加)的实现分析
 ``` java
@@ -283,7 +283,7 @@ put 操作是会阻塞，add 操作会抛出异常，offer 操作会直接返回
 重头开始再获取数据，整个过程就是一个无限循环的过程。 
 通过分析，我们发现有添加操作是不是有两种场景，一个是直接往后添加，一个是达到数据长度后，需要重头再来，
 具体操作如下图：
-<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq2.png">
+<img src="https://blog.tommyyang.cn/img/java/datastructure/abq2.png">
 
 下面看看阻塞添加方法(put)
 
@@ -313,7 +313,7 @@ public void put(E e) throws InterruptedException {
 notFull 条件对象有两种情况，第一种是当队列已满，新来的 put 数据的线程会加入到其等待队列(链表)中，
 第二种情况是，当队列有空间时，会移除队列中的线程，移除成功同时唤醒 put 线程，加入到获取 lock 的等待队列(双链表)的尾部；
 具体操作，如下图：
-<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq3.png">
+<img src="https://blog.tommyyang.cn/img/java/datastructure/abq3.png">
 
 通过以上分析，ArrayBlockingQueue 的 offer、 add、 put 方法已经都详细分析完毕，希望大家可以对其有深入的了解。
 
@@ -412,7 +412,7 @@ public E take() throws InterruptedException {
 没有元素则线程阻塞(可中断的阻塞)，将该线程加入到 notEmpty 条件对象的等待队列中；
 等有新的 put 线程添加了数据，分析发现，会在 put 操作中唤醒 notEmpty 条件对象的等待队列中的 take 线程，
 去执行 take 操作。具体操作如下图：
-<img src="https://blog.tommyyang.cn/img/java/dataDesign/abq4.png">
+<img src="https://blog.tommyyang.cn/img/java/datastructure/abq4.png">
 
 通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，
 根据具体的场景使用具体的方法。

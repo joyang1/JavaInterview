@@ -2,8 +2,7 @@ package cn.tommyyang;
 
 import cn.tommyyang.forkjoinpool.CountTask;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -22,6 +21,9 @@ public class RunTest {
 
         Future<Integer> r1 = forkJoinPool.submit(countTask);
         System.out.println(r1.get());
+//        LinkedList
+//LinkedHashMap
+//        LinkedBlockingQueue
     }
 
 }

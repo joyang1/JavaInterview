@@ -19,8 +19,8 @@
 - [volatile](/keywords/volatile.md)
 
 ## 数据结构
-- [StringBuilder和StringBuffer](/dataDesign/stringbuilderandstringbuffer.md)
-- [BlockingQueue和BlockingDeque](/dataDesign/blockingqueueanddeque.md)
+- [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
+- [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
   * ArrayBlockingQueue
   * LinkedBlockingQueue
   * LinkedBlockingDeque

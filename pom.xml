@@ -17,7 +17,7 @@
         <module>leetcode</module>
         <module>io</module>
         <module>test</module>
-        <module>dataDesign</module>
+        <module>datastructure</module>
     </modules>
 
 

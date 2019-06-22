@@ -417,7 +417,71 @@ public E take() throws InterruptedException {
 通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，
 根据具体的场景使用具体的方法。
 
-分析完提取方法后，我们来分析一下 ArrayBlockingQueue 中的删除元素的方法。
+分析完提取方法后，我们来分析一下 ArrayBlockingQueue 中的删除元素的 remove 方法。
+
+``` java
+void removeAt(final int removeIndex) {
+    // assert lock.getHoldCount() == 1;
+    // assert items[removeIndex] != null;
+    // assert removeIndex >= 0 && removeIndex < items.length;
+    final Object[] items = this.items;
+    if (removeIndex == takeIndex) {
+        // removing front item; just advance
+        items[takeIndex] = null;
+        if (++takeIndex == items.length)
+            takeIndex = 0;
+        count--;
+        if (itrs != null)
+            itrs.elementDequeued();
+    } else {
+        // an "interior" remove
+
+        // slide over all others up through putIndex.
+        final int putIndex = this.putIndex;
+        for (int i = removeIndex;;) {
+            int next = i + 1;
+            if (next == items.length)
+                next = 0;
+            if (next != putIndex) {
+                items[i] = items[next];
+                i = next;
+            } else {
+                items[i] = null;
+                this.putIndex = i;
+                break;
+            }
+        }
+        count--;
+        if (itrs != null)
+            itrs.removedAt(removeIndex);
+    }
+    notFull.signal();
+}
+
+public boolean remove(Object o) {
+    if (o == null) return false;
+    final Object[] items = this.items;
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+        if (count > 0) {
+            final int putIndex = this.putIndex;
+            int i = takeIndex;
+            do {
+                if (o.equals(items[i])) {
+                    removeAt(i);
+                    return true;
+                }
+                if (++i == items.length)
+                    i = 0;
+            } while (i != putIndex);
+        }
+        return false;
+    } finally {
+        lock.unlock();
+    }
+}
+```
 
 ## LinkedBlockingQueue
 

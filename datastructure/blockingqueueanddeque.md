@@ -102,7 +102,7 @@ ArrayBlockingQueue() 是一个用数组实现的有界阻塞队列，内部按�
 
 ArrayBlockingQueue 实现的生产者消费者的 Demo，代码只是一个简单的 ArrayBlockingQueue 的
 使用，Consumer 消费者和 Producer 生产者通过 ArrayBlockingQueue 来获取（take）和添加（put）
-数据。具体代码请访问：[ABQ demo](https://github.com/joyang1/JavaInterview/blob/master/dataDesign/src/main/java/cn/tommyyang/queue/ArrayBlockingQueueDemo.java)。
+数据。具体代码请访问：[ABQ demo](https://github.com/joyang1/JavaInterview/blob/master/datastructure/src/main/java/cn/tommyyang/queue/ArrayBlockingQueueDemo.java)。
 
 ArrayBlockingQueue 内部的阻塞队列是通过 ReentrantLock 和 Condition 条件队列实现的，
 所以 ArrayBlockingQueue 中的元素存在公平和非公平访问的区别，这是因为 ReentrantLock 里面存在公平锁和非公平锁的原因，

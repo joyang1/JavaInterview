@@ -1,4 +1,4 @@
-# 重要的数据结构
+# 数据结构篇
 
 ## String、StringBuilder和StringBuffer
 |  类名|  描述|  是否可|  线程安全性|

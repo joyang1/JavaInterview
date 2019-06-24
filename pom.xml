@@ -14,10 +14,11 @@
         <module>Web</module>
         <module>Lock</module>
         <module>bigdata</module>
-        <module>leetcode</module>
+        <module>codeinterview</module>
         <module>io</module>
         <module>test</module>
         <module>datastructure</module>
+        <module>architecture</module>
     </modules>
 
 

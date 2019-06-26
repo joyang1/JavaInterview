@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
 
-## 排序算法总结
+## 排序篇
 - [冒泡排序](/sortpro/1.bubbleSort.md)
 - [选择排序](/sortpro/2.selectionSort.md)
 - [插入排序](/sortpro/3.insertionSort.md)
@@ -14,16 +14,20 @@
 - [桶排序](/sortpro/9.bucketSort.md)
 - [基数排序](/sortpro/10.radixSort.md)
 
-## [Java内部关键字总结](/keywords)
+## [关键字篇](/keywords)
 - [transient](/keywords/transient.md)
 - [volatile](/keywords/volatile.md)
 
-## 数据结构
+## 数据结构篇
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
 - [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
   * ArrayBlockingQueue
   * LinkedBlockingQueue
   * LinkedBlockingDeque
+  
+## [代码篇](/codeinterview)
+主要介绍 LeetCode 上面的算法题目，以及面试过程中遇到的实际编码问题总结。
+
   
   
 # Author

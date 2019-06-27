@@ -4,6 +4,8 @@ import cn.tommyyang.forkjoinpool.CountTask;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author TommyYang on 2019-04-12
@@ -11,9 +13,13 @@ import java.util.concurrent.*;
 public class RunTest {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        runForkJoinPool();
+    }
+
+    private static void runForkJoinPool() throws ExecutionException, InterruptedException {
         ForkJoinPool forkJoinPool = new ForkJoinPool(5);
         List<Integer> arrs = new ArrayList<>(100000);
-        for (int i = 1; i <= 100000; i++){
+        for (int i = 1; i <= 100000; i++) {
             arrs.add(i);
         }
 
@@ -21,9 +27,6 @@ public class RunTest {
 
         Future<Integer> r1 = forkJoinPool.submit(countTask);
         System.out.println(r1.get());
-//        LinkedList
-//LinkedHashMap
-//        LinkedBlockingQueue
     }
 
 }

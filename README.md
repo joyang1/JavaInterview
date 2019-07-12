@@ -18,7 +18,7 @@
 - [transient](/keywords/transient.md)
 - [volatile](/keywords/volatile.md)
 
-## 数据结构篇
+## [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
 - [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
   * ArrayBlockingQueue

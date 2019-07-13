@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
 
-## 排序篇
+## [排序篇](/sortpro)
 - [冒泡排序](/sortpro/1.bubbleSort.md)
 - [选择排序](/sortpro/2.selectionSort.md)
 - [插入排序](/sortpro/3.insertionSort.md)

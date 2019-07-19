@@ -485,6 +485,381 @@ public boolean remove(Object o) {
 
 #### ArrayBlockingQueue 的迭代器分析
 
+```java
+
+private class Itr implements Iterator<E> {
+    /** Index to look for new nextItem; NONE at end */
+    private int cursor;
+
+    /** Element to be returned by next call to next(); null if none */
+    private E nextItem;
+
+    /** Index of nextItem; NONE if none, REMOVED if removed elsewhere */
+    private int nextIndex;
+
+    /** Last element returned; null if none or not detached. */
+    private E lastItem;
+
+    /** Index of lastItem, NONE if none, REMOVED if removed elsewhere */
+    private int lastRet;
+
+    /** Previous value of takeIndex, or DETACHED when detached */
+    private int prevTakeIndex;
+
+    /** Previous value of iters.cycles */
+    private int prevCycles;
+
+    /** Special index value indicating "not available" or "undefined" */
+    private static final int NONE = -1;
+
+    /**
+     * Special index value indicating "removed elsewhere", that is,
+     * removed by some operation other than a call to this.remove().
+     */
+    private static final int REMOVED = -2;
+
+    /** Special value for prevTakeIndex indicating "detached mode" */
+    private static final int DETACHED = -3;
+
+    Itr() {
+        // assert lock.getHoldCount() == 0;
+        lastRet = NONE;
+        final ReentrantLock lock = ArrayBlockingQueue.this.lock;
+        lock.lock();
+        try {
+            if (count == 0) {
+                // assert itrs == null;
+                cursor = NONE;
+                nextIndex = NONE;
+                prevTakeIndex = DETACHED;
+            } else {
+                final int takeIndex = ArrayBlockingQueue.this.takeIndex;
+                prevTakeIndex = takeIndex;
+                nextItem = itemAt(nextIndex = takeIndex);
+                cursor = incCursor(takeIndex);
+                if (itrs == null) {
+                    itrs = new Itrs(this);
+                } else {
+                    itrs.register(this); // in this order
+                    itrs.doSomeSweeping(false);
+                }
+                prevCycles = itrs.cycles;
+                // assert takeIndex >= 0;
+                // assert prevTakeIndex == takeIndex;
+                // assert nextIndex >= 0;
+                // assert nextItem != null;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    boolean isDetached() {
+        // assert lock.getHoldCount() == 1;
+        return prevTakeIndex < 0;
+    }
+
+    private int incCursor(int index) {
+        // assert lock.getHoldCount() == 1;
+        if (++index == items.length)
+            index = 0;
+        if (index == putIndex)
+            index = NONE;
+        return index;
+    }
+
+    /**
+     * Returns true if index is invalidated by the given number of
+     * dequeues, starting from prevTakeIndex.
+     */
+    private boolean invalidated(int index, int prevTakeIndex,
+                                long dequeues, int length) {
+        if (index < 0)
+            return false;
+        int distance = index - prevTakeIndex;
+        if (distance < 0)
+            distance += length;
+        return dequeues > distance;
+    }
+
+    /**
+     * Adjusts indices to incorporate all dequeues since the last
+     * operation on this iterator.  Call only from iterating thread.
+     */
+    private void incorporateDequeues() {
+        // assert lock.getHoldCount() == 1;
+        // assert itrs != null;
+        // assert !isDetached();
+        // assert count > 0;
+
+        final int cycles = itrs.cycles;
+        final int takeIndex = ArrayBlockingQueue.this.takeIndex;
+        final int prevCycles = this.prevCycles;
+        final int prevTakeIndex = this.prevTakeIndex;
+
+        if (cycles != prevCycles || takeIndex != prevTakeIndex) {
+            final int len = items.length;
+            // how far takeIndex has advanced since the previous
+            // operation of this iterator
+            long dequeues = (cycles - prevCycles) * len
+                + (takeIndex - prevTakeIndex);
+
+            // Check indices for invalidation
+            if (invalidated(lastRet, prevTakeIndex, dequeues, len))
+                lastRet = REMOVED;
+            if (invalidated(nextIndex, prevTakeIndex, dequeues, len))
+                nextIndex = REMOVED;
+            if (invalidated(cursor, prevTakeIndex, dequeues, len))
+                cursor = takeIndex;
+
+            if (cursor < 0 && nextIndex < 0 && lastRet < 0)
+                detach();
+            else {
+                this.prevCycles = cycles;
+                this.prevTakeIndex = takeIndex;
+            }
+        }
+    }
+
+    /**
+     * Called when itrs should stop tracking this iterator, either
+     * because there are no more indices to update (cursor < 0 &&
+     * nextIndex < 0 && lastRet < 0) or as a special exception, when
+     * lastRet >= 0, because hasNext() is about to return false for the
+     * first time.  Call only from iterating thread.
+     */
+    private void detach() {
+        // Switch to detached mode
+        // assert lock.getHoldCount() == 1;
+        // assert cursor == NONE;
+        // assert nextIndex < 0;
+        // assert lastRet < 0 || nextItem == null;
+        // assert lastRet < 0 ^ lastItem != null;
+        if (prevTakeIndex >= 0) {
+            // assert itrs != null;
+            prevTakeIndex = DETACHED;
+            // try to unlink from itrs (but not too hard)
+            itrs.doSomeSweeping(true);
+        }
+    }
+
+    /**
+     * For performance reasons, we would like not to acquire a lock in
+     * hasNext in the common case.  To allow for this, we only access
+     * fields (i.e. nextItem) that are not modified by update operations
+     * triggered by queue modifications.
+     */
+    public boolean hasNext() {
+        // assert lock.getHoldCount() == 0;
+        if (nextItem != null)
+            return true;
+        noNext();
+        return false;
+    }
+
+    private void noNext() {
+        final ReentrantLock lock = ArrayBlockingQueue.this.lock;
+        lock.lock();
+        try {
+            // assert cursor == NONE;
+            // assert nextIndex == NONE;
+            if (!isDetached()) {
+                // assert lastRet >= 0;
+                incorporateDequeues(); // might update lastRet
+                if (lastRet >= 0) {
+                    lastItem = itemAt(lastRet);
+                    // assert lastItem != null;
+                    detach();
+                }
+            }
+            // assert isDetached();
+            // assert lastRet < 0 ^ lastItem != null;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public E next() {
+        // assert lock.getHoldCount() == 0;
+        final E x = nextItem;
+        if (x == null)
+            throw new NoSuchElementException();
+        final ReentrantLock lock = ArrayBlockingQueue.this.lock;
+        lock.lock();
+        try {
+            if (!isDetached())
+                incorporateDequeues();
+            // assert nextIndex != NONE;
+            // assert lastItem == null;
+            lastRet = nextIndex;
+            final int cursor = this.cursor;
+            if (cursor >= 0) {
+                nextItem = itemAt(nextIndex = cursor);
+                // assert nextItem != null;
+                this.cursor = incCursor(cursor);
+            } else {
+                nextIndex = NONE;
+                nextItem = null;
+            }
+        } finally {
+            lock.unlock();
+        }
+        return x;
+    }
+
+    public void remove() {
+        // assert lock.getHoldCount() == 0;
+        final ReentrantLock lock = ArrayBlockingQueue.this.lock;
+        lock.lock();
+        try {
+            if (!isDetached())
+                incorporateDequeues(); // might update lastRet or detach
+            final int lastRet = this.lastRet;
+            this.lastRet = NONE;
+            if (lastRet >= 0) {
+                if (!isDetached())
+                    removeAt(lastRet);
+                else {
+                    final E lastItem = this.lastItem;
+                    // assert lastItem != null;
+                    this.lastItem = null;
+                    if (itemAt(lastRet) == lastItem)
+                        removeAt(lastRet);
+                }
+            } else if (lastRet == NONE)
+                throw new IllegalStateException();
+            // else lastRet == REMOVED and the last returned element was
+            // previously asynchronously removed via an operation other
+            // than this.remove(), so nothing to do.
+
+            if (cursor < 0 && nextIndex < 0)
+                detach();
+        } finally {
+            lock.unlock();
+            // assert lastRet == NONE;
+            // assert lastItem == null;
+        }
+    }
+
+    /**
+     * Called to notify the iterator that the queue is empty, or that it
+     * has fallen hopelessly behind, so that it should abandon any
+     * further iteration, except possibly to return one more element
+     * from next(), as promised by returning true from hasNext().
+     */
+    void shutdown() {
+        // assert lock.getHoldCount() == 1;
+        cursor = NONE;
+        if (nextIndex >= 0)
+            nextIndex = REMOVED;
+        if (lastRet >= 0) {
+            lastRet = REMOVED;
+            lastItem = null;
+        }
+        prevTakeIndex = DETACHED;
+        // Don't set nextItem to null because we must continue to be
+        // able to return it on next().
+        //
+        // Caller will unlink from itrs when convenient.
+    }
+
+    private int distance(int index, int prevTakeIndex, int length) {
+        int distance = index - prevTakeIndex;
+        if (distance < 0)
+            distance += length;
+        return distance;
+    }
+
+    /**
+     * Called whenever an interior remove (not at takeIndex) occurred.
+     *
+     * @return true if this iterator should be unlinked from itrs
+     */
+    boolean removedAt(int removedIndex) {
+        // assert lock.getHoldCount() == 1;
+        if (isDetached())
+            return true;
+
+        final int cycles = itrs.cycles;
+        final int takeIndex = ArrayBlockingQueue.this.takeIndex;
+        final int prevCycles = this.prevCycles;
+        final int prevTakeIndex = this.prevTakeIndex;
+        final int len = items.length;
+        int cycleDiff = cycles - prevCycles;
+        if (removedIndex < takeIndex)
+            cycleDiff++;
+        final int removedDistance =
+            (cycleDiff * len) + (removedIndex - prevTakeIndex);
+        // assert removedDistance >= 0;
+        int cursor = this.cursor;
+        if (cursor >= 0) {
+            int x = distance(cursor, prevTakeIndex, len);
+            if (x == removedDistance) {
+                if (cursor == putIndex)
+                    this.cursor = cursor = NONE;
+            }
+            else if (x > removedDistance) {
+                // assert cursor != prevTakeIndex;
+                this.cursor = cursor = dec(cursor);
+            }
+        }
+        int lastRet = this.lastRet;
+        if (lastRet >= 0) {
+            int x = distance(lastRet, prevTakeIndex, len);
+            if (x == removedDistance)
+                this.lastRet = lastRet = REMOVED;
+            else if (x > removedDistance)
+                this.lastRet = lastRet = dec(lastRet);
+        }
+        int nextIndex = this.nextIndex;
+        if (nextIndex >= 0) {
+            int x = distance(nextIndex, prevTakeIndex, len);
+            if (x == removedDistance)
+                this.nextIndex = nextIndex = REMOVED;
+            else if (x > removedDistance)
+                this.nextIndex = nextIndex = dec(nextIndex);
+        }
+        else if (cursor < 0 && nextIndex < 0 && lastRet < 0) {
+            this.prevTakeIndex = DETACHED;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Called whenever takeIndex wraps around to zero.
+     *
+     * @return true if this iterator should be unlinked from itrs
+     */
+    boolean takeIndexWrapped() {
+        // assert lock.getHoldCount() == 1;
+        if (isDetached())
+            return true;
+        if (itrs.cycles - prevCycles > 1) {
+            // All the elements that existed at the time of the last
+            // operation are gone, so abandon further iteration.
+            shutdown();
+            return true;
+        }
+        return false;
+    }
+
+//         /** Uncomment for debugging. */
+//         public String toString() {
+//             return ("cursor=" + cursor + " " +
+//                     "nextIndex=" + nextIndex + " " +
+//                     "lastRet=" + lastRet + " " +
+//                     "nextItem=" + nextItem + " " +
+//                     "lastItem=" + lastItem + " " +
+//                     "prevCycles=" + prevCycles + " " +
+//                     "prevTakeIndex=" + prevTakeIndex + " " +
+//                     "size()=" + size() + " " +
+//                     "remainingCapacity()=" + remainingCapacity());
+//         }
+}
+    
+```
+
 ## LinkedBlockingQueue
 
 

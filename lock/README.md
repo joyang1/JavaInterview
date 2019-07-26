@@ -2,6 +2,14 @@
 其实本来 Lock 应该放到 data-structure 模块的，但是为了体现其重要性，
 单独用一个篇章来整理。
 
+# 锁的分类介绍
+
+## 悲观锁与乐观锁
+
+## 乐观锁的基础
+
+## 自旋锁
+
 ## synchronized 与 Lock interface
 Java 中两种实现加锁的方式：一种是使用 synchronized 关键字，另一种是使用 Lock 接口的实现类。
 

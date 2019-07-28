@@ -27,6 +27,9 @@ public class RunTest {
 
         Future<Integer> r1 = forkJoinPool.submit(countTask);
         System.out.println(r1.get());
-    }
 
+//        Math
+//        LinkedBlockingQueue
+//        HashMap
+    }
 }

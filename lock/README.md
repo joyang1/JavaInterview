@@ -21,6 +21,78 @@
 总结：**乐观锁适合写比较少，冲突很少发生的场景；而写多，冲突多的场景适合使用悲观锁**。
 
 ## 乐观锁的基础 --- CAS
+在乐观锁的实现中，我们必须要了解的一个概念：CAS。
+
+什么是 CAS 呢？ Compare-and-Swap，即**比较并替换**。
+
+- 比较：读取到一个值 A，在将其更新为 B 之前，检查原值是否为 A（未被其它线程修改过，**这里忽略 ABA 问题**）。
+
+- 替换：如果是，更新 A 为 B，结束。如果不是，则不会更新。
+
+上面两个步骤都是原子操作，可以理解为瞬间完成，在 CPU 看来就是一步操作。
+
+有了 CAS，就可以实现一个乐观锁：
+
+```java
+
+public class OptimisticLockSample{
+    
+    public void test(){
+        int data = 123; // 共享数据
+        
+        // 更新数据的线程会进行如下操作
+        for (;;) {
+            int oldData = data;
+            int newData = doSomething(oldData);
+            
+            // 下面是模拟 CAS 更新操作，尝试更新 data 的值
+            if (data == oldData) { // compare
+                data = newData; // swap
+                break; // finish
+            } else {
+                // 什么都不敢，循环重试
+            }
+        }   
+    }
+    
+    /**
+    * 
+    * 很明显，test() 里面的代码根本不是原子性的，只是展示了下 CAS 的流程。
+    * 因为真正的 CAS 利用了 CPU 指令。
+    *  
+    * */ 
+    
+
+}
+
+```
+
+在 Java 中也是通过 native 方法实现的 CAS。
+
+```java
+
+public final class Unsafe {
+    
+    ...
+    
+    public final native boolean compareAndSwapObject(Object var1, long var2, Object var4, Object var5);
+    
+    public final native boolean compareAndSwapInt(Object var1, long var2, int var4, int var5);
+    
+    public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6);  
+    
+    ...
+} 
+
+
+```
+
+上面写了一个简单直观的乐观锁（确切的来说应该是乐观锁流程）的实现，它允许多个线程同时读取（因为根本没有加锁操作），如果更新数据的话，
+有且仅有一个线程可以成功更新数据，并导致其它线程需要回滚重试。CAS 利用 CPU 指令，从硬件层面保证了原子性，以达到类似于锁的效果。
+
+从乐观锁的整个流程中可以看出，并没有**加锁**和**解锁**的操作，因此乐观锁策略也被称作为**无锁编程**。换句话说，乐观锁其实不是"锁"，
+它仅仅是一个循环重试的 CAS 算法而已。
+
 
 ## 自旋锁
 

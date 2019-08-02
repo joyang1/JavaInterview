@@ -81,10 +81,10 @@
 提交过程中"事务提交"和"事务中断"两种场景下的交互流程。
 
 **事务提交场景：**
-<img src="https://blog.tommyyang.cn/img/java/architecture/2PC-commit.png">
+<img src="https://blog.tommyyang.cn/img/architecture/2PC-commit.png">
 
 **事务中段场景：**
-<img src="https://blog.tommyyang.cn/img/java/architecture/2PC-rollback.png">
+<img src="https://blog.tommyyang.cn/img/architecture/2PC-rollback.png">
 
 
 

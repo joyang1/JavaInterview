@@ -18,6 +18,8 @@
 - [transient](/keywords/transient.md)
 - [volatile](/keywords/volatile.md)
 
+## [Lock 篇](/lock)
+
 ## [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
 - [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)

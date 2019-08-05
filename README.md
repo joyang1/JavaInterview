@@ -29,6 +29,8 @@
   
 ## [大数据篇](/bigdata)
 
+## [架构篇](/architecture)
+
 ## [web篇](/web)
   
 ## [代码篇](/codeinterview)

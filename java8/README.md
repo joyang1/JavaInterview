@@ -66,6 +66,7 @@ public class ProgressDemo {
 1. stream()
 
 2. parallelStream()
+
     非线程安全的；
     默认线程池的数量就是处理器的数量，特殊场景下可以使用系统属性：
     -Djava.util.concurrent.ForkJoinPool.common.parallelism={N} 调整

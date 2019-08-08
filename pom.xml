@@ -19,6 +19,7 @@
         <module>test</module>
         <module>datastructure</module>
         <module>architecture</module>
+        <module>java8</module>
     </modules>
 
 

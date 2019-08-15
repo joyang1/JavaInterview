@@ -160,12 +160,146 @@ Java 中以 Reentrant 开头命名的锁都是可重入锁，而且 **JDK 提供
 
 
 ## 公平锁和非公平锁
+如果多个线程申请一把**公平锁**，那么获得锁的线程释放锁的时候，先申请的先得到，很公平。如果是**非公平锁**，后申请的线程可能先获得锁，是
+随机获取还是其它方式，都是根据实现算法而定的。
 
-## 参数介绍
+对 ReentrantLock 类来说，通过构造函数可以**指定该锁是否是公平锁，默认是非公平锁**。因为在大多数情况下，非公平锁的吞吐量比公平锁的大，
+如果没有特殊要求，优先考虑使用非公平锁。
 
--XX:-UseBiasedLocking=false 关闭偏向锁
+而对于 synchronized 锁而言，它只能是一种非公平锁，没有任何方式使其变成公平锁。这也是 ReentrantLock 相对于 synchronized 锁的一个
+优点，更加的灵活。
+
+以下是 ReentrantLock 构造器代码：
+
+``` java
+
+/**
+ * Creates an instance of {@code ReentrantLock} with the
+ * given fairness policy.
+ *
+ * @param fair {@code true} if this lock should use a fair ordering policy
+ */
+public ReentrantLock(boolean fair) {
+    sync = fair ? new FairSync() : new NonfairSync();
+}
 
 ```
+
+ReentrantLock 内部实现了 FairSync 和 NonfairSync 两个内部类来实现公平锁和非公平锁。具体源码分析会在接下来的章节给出，敬请关注
+该项目，欢迎 fork 和 star。
+
+
+## 可中断锁
+字面意思是"可以**响应中断**的锁"。
+
+首先，我们需要理解的是什么是**中断**。 Java 中并没有提供任何可以直接中断线程的方法，只提供了**中断机制**。那么何为**中断机制**呢？
+线程 A 向线程 B 发出"请你停止运行"的请求，就是调用 Thread.interrupt() 的方法（当然线程 B 本身也可以给自己发送中断请求，
+即 Thread.currentThread().interrupt()），但线程 B 并不会立即停止运行，而是自行选择在合适的时间点以自己的方式响应中断，也可以
+直接忽略此中断。也就是说，Java 的**中断不能直接终止线程**，只是设置了状态为响应中断的状态，需要被中断的线程自己决定怎么处理。这就像
+在读书的时候，老师在晚自习时叫学生自己复习功课，但学生是否复习功课，怎么复习功课则完全取决于学生自己。
+
+回到锁的分析上来，如果线程 A 持有锁，线程 B 等待持获取该锁。由于线程 A 持有锁的时间过长，线程 B 不想继续等了，我们可以让线程 B 中断
+自己或者在别的线程里面中断 B，这种就是 **可中段锁**。
+
+在 Java 中， synchronized 锁是**不可中断锁**，而 Lock 的实现类都是 **可中断锁**。从而可以看出 JDK 自己实现的 Lock 锁更加的
+灵活，这也就是有了 synchronized 锁后，为什么还要实现那么些 Lock 的实现类。
+
+Lock 接口的相关定义：
+
+```java
+
+public interface Lock {
+
+    void lock();
+
+    void lockInterruptibly() throws InterruptedException;
+
+    boolean tryLock();
+    
+    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
+
+    
+    void unlock();
+
+    Condition newCondition();
+}
+
+```
+
+其中 lockInterruptibly 就是获取可中断锁。
+
+## 共享锁
+字面意思是多个线程可以共享一个锁。一般用共享锁都是在读数据的时候，比如我们可以允许 10 个线程同时读取一份共享数据，这时候我们
+可以设置一个有 10 个凭证的共享锁。
+
+在 Java 中，也有具体的共享锁实现类，比如 Semaphore。 该类的源码分析会在后续章节进行分析，敬请关注该项目，欢迎 fork 和 star。
+
+## 互斥锁
+字面意思是线程之间互相排斥的锁，也就是表明锁只能被一个线程拥有。
+
+在 Java 中， ReentrantLock、synchronized 锁都是互斥锁。
+
+## 读写锁
+读写锁其实是一对锁，一个读锁（共享锁）和一个写锁（互斥锁、排他锁）。
+
+在 Java 中， ReadWriteLock 接口只规定了两个方法，一个返回读锁，一个返回写锁。
+
+```java
+
+public interface ReadWriteLock {
+    /**
+     * Returns the lock used for reading.
+     *
+     * @return the lock used for reading
+     */
+    Lock readLock();
+
+    /**
+     * Returns the lock used for writing.
+     *
+     * @return the lock used for writing
+     */
+    Lock writeLock();
+}
+
+```
+
+文章前面讲过[乐观锁策略](#乐观锁的基础 --- CAS)，所有线程可以随时读，仅在写之前判断值有没有被更改。
+
+读写锁其实做的事情是一样的，但是策略稍有不同。很多情况下，线程知道自己读取数据后，是否是为了更改它。那么为何不在加锁的时候直接明确
+这一点呢？如果我读取值是为了更新它（SQL 的 for update 就是这个意思），那么加锁的时候直接加**写锁**，我持有写锁的时候，别的线程
+无论是读还是写都需要等待；如果读取数据仅仅是为了前端展示，那么加锁时就明确加一个**读锁**，其它线程如果也要加读锁，不需要等待，可以
+直接获取（读锁计数器加 1）。
+
+虽然读写锁感觉与乐观锁有点像，但是**读写锁是悲观锁策略**。因为读写锁并没有在**更新前**判断值有没有被修改过，而是在**加锁前**决定
+应该用读锁还是写锁。乐观锁特指无锁编程。
+
+JDK 内部提供了一个唯一一个 ReadWriteLock 接口实现类是 ReentrantReadWriteLock。通过名字可以看到该锁提供了读写锁，并且也是
+可重入锁。
+
+## 总结
+Java 中使用的各种锁基本都是**悲观锁**，那么 Java 中有乐观锁么？结果是肯定的，那就是 java.util.concurrent.atomic 下面的
+原子类都是通过乐观锁实现的。如下：
+
+``` java
+
+public final int getAndAddInt(Object var1, long var2, int var4) {
+    int var5;
+    do {
+        var5 = this.getIntVolatile(var1, var2);
+    } while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));
+
+    return var5;
+}
+
+```
+
+通过上述源码可以发现，在一个循环里面不断 CAS，直到成功为止。
+
+## 参数介绍
+```
+-XX:-UseBiasedLocking=false 关闭偏向锁
+
 
 JDK1.6 
 

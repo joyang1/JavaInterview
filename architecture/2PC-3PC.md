@@ -83,7 +83,7 @@
 **事务提交场景：**
 <img src="https://blog.tommyyang.cn/img/architecture/2PC-commit.png">
 
-**事务中段场景：**
+**事务中断场景：**
 <img src="https://blog.tommyyang.cn/img/architecture/2PC-rollback.png">
 
 

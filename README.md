@@ -27,6 +27,9 @@
 ## [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
 - [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
+  * Queue
+  * Deque
+  * LinkedList
   * ArrayBlockingQueue
   * LinkedBlockingQueue
   * LinkedBlockingDeque

@@ -79,7 +79,8 @@ public class ProgressDemo {
 2. (parameters) -> { statements; }
 
 ## 默认方法
-实现有 default 方法的接口， 可以重写 default 方法，不重写则默认使用 interface 中的默认方法
+实现有 default 方法的接口， 可以重写 default 方法，不重写则默认使用 interface 中的默认方法。
+接口有默认方法之后，个人觉得接口和抽象类之间的区别更小了。
 
 ```java
 

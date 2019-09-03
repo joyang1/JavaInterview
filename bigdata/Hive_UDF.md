@@ -33,13 +33,13 @@ UDF：用户自定义函数，也是实现起来最简单的一种函数。
 
 - 在 beeline（hive 的一种终端）中输入如下命令：
     
-    - jdbc:hive2://localhost:10000> add jar /data/tommyyang/HiveUDF.jar;
+    - 0: jdbc:hive2://localhost:10000> add jar /data/tommyyang/HiveUDF.jar;
     
-    - jdbc:hive2://localhost:10000> create temporary function ip2loc as 'cn.tommyyang.IPToLocation';
+    - 0: jdbc:hive2://localhost:10000> create temporary function ip2loc as 'cn.tommyyang.IPToLocation';
     
-    - select ip2loc("118.28.1.1");
+    - 0: jdbc:hive2://localhost:10000> select ip2loc("118.28.1.1");
     
-    - drop temporary function ip2loc;
+    - 0: jdbc:hive2://localhost:10000> drop temporary function ip2loc;
 
 具体代码实现：
 

@@ -1,4 +1,6 @@
 # Java面试总结
+该项目主要分享一些个人经验，以及一些个人项目中遇到的问题；
+还有就是一些读书笔记。
 
 [![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
 

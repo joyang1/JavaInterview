@@ -53,12 +53,21 @@ UDF：用户自定义函数，也是实现起来最简单的一种函数。
                 "  [中国,上海]"
 )
 public class IPToLocation extends UDF {
+    
+    private static final InputStream stream = IPToLocation.class.getClassLoader().getResourceAsStream("ipipfree.ipdb");
+    private static City db = null;
+
+    static {
+        try {
+            db = new City(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public ArrayList<String> evaluate(Text s) throws IOException, IPFormatException {
         ArrayList<String> allTexts = new ArrayList<>();
         if (s != null) {
-            InputStream stream = IPToLocation.class.getClassLoader().getResourceAsStream("ipipfree.ipdb");
-            City db = new City(stream);
             CityInfo info = db.findInfo(s.toString(), "CN");
             allTexts.add(info.getCountryName());
             allTexts.add(info.getRegionName());

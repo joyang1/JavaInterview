@@ -2,6 +2,8 @@
 该项目主要分享一些个人经验，以及一些个人项目中遇到的问题；
 还有就是一些读书笔记。
 
+为开源贡献自己的一份力量。
+
 [![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
 
 ## [排序篇](/sortpro)
@@ -45,6 +47,8 @@
 ## [代码篇](/codeinterview)
 主要介绍 LeetCode 上面的算法题目，以及面试过程中遇到的实际编码问题总结。
 
+## [books](/books)
+各种编程类书籍整理。大家可以直接下载阅读，增长自己编程技术。
   
   
 # Author

@@ -242,7 +242,7 @@ file utils const:23236 ms
 
 大家可以通过如下测试源码自行测试：
 
-[测试源码](https://github.com/joyang1/JavaInterview/blob/master/io/src/main/java/cn.tommyyang/file/FileTest.java)
+[测试源码](https://github.com/joyang1/JavaInterview/blob/master/io/src/main/java/cn/tommyyang/file/FileTest.java)
 
 通过测试我们可以发现，确实是改进版本二的代码效率最高。
 

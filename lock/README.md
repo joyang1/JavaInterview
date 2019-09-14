@@ -50,7 +50,7 @@ public class OptimisticLockSample{
                 data = newData; // swap
                 break; // finish
             } else {
-                // 什么都不敢，循环重试
+                // 什么都不干，循环重试
             }
         }   
     }

@@ -42,12 +42,12 @@
 
 ## [架构篇](/architecture)
 
-## [web篇](/web)
+## [web 篇](/web)
   
 ## [代码篇](/codeinterview)
 主要介绍 LeetCode 上面的算法题目，以及面试过程中遇到的实际编码问题总结。
 
-## [books](/books)
+## [书单篇](/books)
 各种编程类书籍整理。大家可以直接下载阅读，增长自己编程技术。
   
   

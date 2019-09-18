@@ -10,5 +10,7 @@
 | :----: | :----: |   :----:   | 
 | Effective Java 中文版（第 2 版）.pdf | [下载](https://pan.baidu.com/s/150ztSubX3-NhgMHMPiRFYQ) | mmdw |
 | 实战 Java 高并发程序设计.pdf | [下载](https://pan.baidu.com/s/1QUse0rmMBIvxFgeiJZ7TxQ) | l9xt |
+| Java8 实战.pdf | [下载](https://pan.baidu.com/s/1y5m1hgn9cJT7pyE5qI9UuQ) | og1w |
+| 深入理解 Java 虚拟机第二版.pdf | [下载](https://pan.baidu.com/s/1mFE-B03b5Dwuz3_CJgHA7g) | c1j1 |
 
 ## 架构

@@ -1,8 +1,5 @@
 package cn.tommyyang.collections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.*;
 
 /**
@@ -12,8 +9,6 @@ import java.util.*;
  * @File : ListUtils.java
  */
 public class ListUtils {
-
-    private final static Logger logger = LoggerFactory.getLogger(ListUtils.class);
 
     public static List maxArrayList(int size) {
         List<String> strList = new ArrayList<String>(size);
@@ -58,7 +53,7 @@ public class ListUtils {
                 listStr.remove(); //考虑到list的删除效率慢，此种方法对于大数据集合来说不合适
             }
         }
-        logger.info("after deWight list size: " + sourse.size());
+        System.out.println("after deWight list size: " + sourse.size());
     }
 
     public static void deWeightList(Set<String> des, List<String> sourse) {
@@ -72,7 +67,7 @@ public class ListUtils {
                 listStr.remove(); //考虑到list的删除效率慢，此种方法对于大数据集合来说不合适
             }
         }
-        logger.info("after deWight list size: " + sourse.size());
+        System.out.println("after deWight list size: " + sourse.size());
     }
 
     public static void deWeightListByNewList(Set<String> des, List<String> sourse) {
@@ -90,7 +85,7 @@ public class ListUtils {
         }
         sourse.clear();
         sourse = existList;
-        logger.info("after deWight list size: " + sourse.size());
+        System.out.println("after deWight list size: " + sourse.size());
     }
 
     public static void deWeightListOther(List<String> des, List<String> sourse) {
@@ -106,7 +101,7 @@ public class ListUtils {
                 }
             }
         }
-        logger.info("after other deWight list size: " + sourse.size());
+        System.out.println("after other deWight list size: " + sourse.size());
     }
 
 

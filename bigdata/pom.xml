@@ -10,67 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bigdata</artifactId>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-
-    <repositories>
-        <repository>
-            <id>confluent</id>
-            <url>http://packages.confluent.io/maven/</url>
-        </repository>
-        <repository>
-            <id>releases</id>
-            <name>jianshu Repository</name>
-            <url>http://h-cm2:8081/repository/maven-releases/</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>com.jianshu.qian</groupId>
-            <artifactId>qian-core</artifactId>
-            <version>1.16.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.8.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>0.11.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.11</artifactId>
-            <version>1.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.kafka</groupId>
-                    <artifactId>kafka-clients</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 
 </project>

@@ -2,7 +2,5 @@ sudo: required
 language: java
 
 jdk:
-  - oraclejdk8
+#  - oraclejdk8
   - openjdk8
-  - mvn -N io.takari:maven:wrapper
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V

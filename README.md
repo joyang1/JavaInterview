@@ -1,10 +1,11 @@
-# Java面试总结
-该项目主要分享一些个人经验，以及一些个人项目中遇到的问题；
+# Java 知识总结
+[![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
+**该项目主要分享一些个人经验，以及一些个人项目中遇到的问题；**
 还有就是一些读书笔记。
 
-为开源贡献自己的一份力量。
-
-[![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
+**为开源贡献自己的一份力量。**
 
 ## [排序篇](/sortpro)
 - [冒泡排序](/sortpro/1.bubbleSort.md)

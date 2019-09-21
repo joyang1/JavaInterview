@@ -1,4 +1,4 @@
-package cn.tommyyang.hive;
+package cn.tommyyang.hive.udf;
 
 /**
  * @Author : TommyYang

@@ -6,7 +6,7 @@
 
 ## 依赖
 开发 Hive UDF 之前，我们需要引入一个 jar，这个 jar 就是 hive-exec，里面定义了各种我们自定义的 UDF 函数的
-类型：UDF、 UDAF、 UDTF、 GenericUDF 等。
+类型：UDF、GenericUDF、GenericUDTF 等。
 
 ```xml
 
@@ -83,6 +83,7 @@ public class IPToLocation extends UDF {
 @Description 为该 UDF 的描述，你可以通过命令 **desc function ip2loc**查看具体的描述；如下图：
 <img src="https://blog.tommyyang.cn/img/bigdata/hive/hive-udf-1.png">
 
-## UDAF(User-Defined-Aggregation-Function)
+## GenericUDF
 
-## UDTF(User-Defined-Table-Generating-Function)
+
+## GenericUDTF

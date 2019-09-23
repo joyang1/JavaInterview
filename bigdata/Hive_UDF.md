@@ -65,6 +65,7 @@ public class IPToLocation extends UDF {
         }
     }
 
+    // 具体实现逻辑
     public ArrayList<String> evaluate(Text s) throws IOException, IPFormatException {
         ArrayList<String> allTexts = new ArrayList<>();
         if (s != null) {
@@ -84,6 +85,7 @@ public class IPToLocation extends UDF {
 <img src="https://blog.tommyyang.cn/img/bigdata/hive/hive-udf-1.png">
 
 ## GenericUDF
+相对 UDF，GenericUDF 就复杂一些，下面我们通过创建一个 containsString 方法的例子，
 
 
 ## GenericUDTF

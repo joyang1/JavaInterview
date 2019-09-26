@@ -19,3 +19,6 @@
 
 ## 大型网站架构
 
+## 流行数据库架构
+- [mysql](mysql.md)
+- [redis](redis.md)

@@ -201,16 +201,12 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
 
 ```
 
-从上面成员变量中可以看出，内部使用数组对象 items 来存储所有的数据；
-通过同一个 ReentrantLock 来同时控制添加数据线程和移除数据线程的并发访问，
-这个与 LinkedBlockingQueue 有很大区别(下面会进行分析)。
-对于 `notEmpty` 条件对象是用于存放等待调用(此时队列中没有数据) take 方法的线程，
-这些线程会加入到 `notEmpty` 条件对象的等待队列(单链表)中，
-同时当队列中有数据后会通过 `notEmpty` 条件对象唤醒等待队列(链表)中等待的线程(链表中第一个***non-null 且 status 为 Condition*** 的线程)去 take 数据。
-对于 `notFull` 条件对象是用于存放等待调用(此时队列容量已满) put 方法的线程，
-这些线程会加入到 `notFull` 条件对象的等待队列(单链表)中，同时当队列中数据被消费后会通过 `notFull` 条件对象唤醒等待队列(链表)中等待的线程去 put 数据。
-takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，
-putIndex 表示的是下一个(put、offer、add)被调用时添加元素的索引。 
+从上面成员变量中可以看出，内部使用数组对象 items 来存储所有的数据；通过同一个 ReentrantLock 来同时控制添加数据线程和移除数据线程的并发访问，这个与 LinkedBlockingQueue 有很大区别(下面会进行分析)。
+
+对于 `notEmpty` 条件对象是用于存放等待调用(此时队列中没有数据) take 方法的线程，这些线程会加入到 `notEmpty` 条件对象的等待队列(单链表)中，同时当队列中有数据后会通过 `notEmpty` 条件对象唤醒等待队列(链表)中等待的线程(链表中第一个***non-null 且 status 为 Condition*** 的线程)去 take 数据。
+
+对于 `notFull` 条件对象是用于存放等待调用(此时队列容量已满) put 方法的线程，这些线程会加入到 `notFull` 条件对象的等待队列(单链表)中，同时当队列中数据被消费后会通过 `notFull` 条件对象唤醒等待队列(链表)中等待的线程去 put 数据。takeIndex 表示的是下一个(take、poll、peek、remove)方法被调用时获取数组元素的索引，putIndex 表示的是下一个(put、offer、add)被调用时添加元素的索引。 
+
 数据出队、入队操作如下：
 <img src="https://blog.tommyyang.cn/img/java/datastructure/abq1.png">
 
@@ -269,19 +265,8 @@ public boolean add(E e) {
 
 ```
 
-offer 方法和 add 方法实现很简单，大家只需要知道其区别就好了；
-这里着重讲一下 enqueue 方法里面留下的疑问，为什么当 putIndex 到了数组最后一个元素之后，
-是重头再来，设置为0；首先，你要想到 ArrayBlockingQueue 整个入队和出队操作都是线程安全的，
-而且 ArrayBlockingQueue 也是先进先出的队列；
-所以想一想，是不是数据入队后，从第一个数组位置上开始添加数据，依次往后入队；
-数据出队也是从数组第一个位置出队，出队后该位置数据为空，依次出队，然后这些位置数据都为空；
-所以只要 count 的个数没有达到数组长度时，虽然 putIndex 达到了数组长度，
-说明数组前面的位置上已经有数据出队了，所以添加元素，是不是就从头开始就行了。(想明白了其实就很简单了，哈哈)
-因为我们有一个 count 成员变量来记录元素的个数，当队列已满时，
-put 操作是会阻塞，add 操作会抛出异常，offer 操作会直接返回false；
-因此我们也不用担心数据会覆盖。这个 putIndex 和 takeIndex 达到数据长度后都会重新设置为0，
-重头开始再获取数据，整个过程就是一个无限循环的过程。 
-通过分析，我们发现有添加操作是不是有两种场景，一个是直接往后添加，一个是达到数据长度后，需要重头再来，
+offer 方法和 add 方法实现很简单，大家只需要知道其区别就好了；这里着重讲一下 enqueue 方法里面留下的疑问，为什么当 putIndex 到了数组最后一个元素之后，是重头再来，设置为0；首先，你要想到 ArrayBlockingQueue 整个入队和出队操作都是线程安全的，而且 ArrayBlockingQueue 也是先进先出的队列；所以想一想，是不是数据入队后，从第一个数组位置上开始添加数据，依次往后入队；数据出队也是从数组第一个位置出队，出队后该位置数据为空，依次出队，然后这些位置数据都为空；所以只要 count 的个数没有达到数组长度时，虽然 putIndex 达到了数组长度，说明数组前面的位置上已经有数据出队了，所以添加元素，是不是就从头开始就行了(想明白了其实就很简单了，哈哈)。因为我们有一个 count 成员变量来记录元素的个数，当队列已满时，put 操作是会阻塞，add 操作会抛出异常，offer 操作会直接返回false；因此我们也不用担心数据会覆盖。这个 putIndex 和 takeIndex 达到数据长度后都会重新设置为0，重头开始再获取数据，整个过程就是一个无限循环的过程。 通过分析，我们发现有添加操作是不是有两种场景，一个是直接往后添加，一个是达到数据长度后，需要重头再来，
+
 具体操作如下图：
 <img src="https://blog.tommyyang.cn/img/java/datastructure/abq2.png">
 
@@ -307,11 +292,8 @@ public void put(E e) throws InterruptedException {
 }
 ```
 
-通过源码分析，发现 offer, add 都是无阻塞添加方法，两者的具体区别在上面分析过了；
-而 put 方法确实是一个阻塞方法，当队列已满的时候，线程会挂起，
-然后将该线程加入到 notFull 条件对象的等待队列(链表)中；
-notFull 条件对象有两种情况，第一种是当队列已满，新来的 put 数据的线程会加入到其等待队列(链表)中，
-第二种情况是，当队列有空间时，会移除队列中的线程，移除成功同时唤醒 put 线程，加入到获取 lock 的等待队列(双链表)的尾部；
+通过源码分析，发现 offer, add 都是无阻塞添加方法，两者的具体区别在上面分析过了；而 put 方法确实是一个阻塞方法，当队列已满的时候，线程会挂起，然后将该线程加入到 notFull 条件对象的等待队列(链表)中；notFull 条件对象有两种情况，第一种是当队列已满，新来的 put 数据的线程会加入到其等待队列(链表)中，第二种情况是，当队列有空间时，会移除队列中的线程，移除成功同时唤醒 put 线程，加入到获取 lock 的等待队列(双链表)的尾部。
+
 具体操作，如下图：
 <img src="https://blog.tommyyang.cn/img/java/datastructure/abq3.png">
 
@@ -320,6 +302,7 @@ notFull 条件对象有两种情况，第一种是当队列已满，新来的 pu
 #### 提取(阻塞提取)的实现分析
 
 提取即移除数组中的元素，下面我们具体来分析 ArrayBlockingQueue 的提取数组中元素的操作。
+
 同上分析，我们首先从 dequeue 方法分析开始。
 
 ``` java
@@ -386,8 +369,7 @@ public E peek() {
 
 ```
 
-通过上述代码，可以看出 peek 和 poll 的区别，peek 是获取元素，不会删除 takeIndex 位置原有的数据，
-takeIndex 也不会向前前进一位。
+通过上述代码，可以看出 peek 和 poll 的区别，peek 是获取元素，不会删除 takeIndex 位置原有的数据，takeIndex 也不会向前前进一位。
 
 下面来分析下阻塞提取 take 方法：
 
@@ -408,14 +390,12 @@ public E take() throws InterruptedException {
 }
 ```
 
-其实分析完阻塞添加 put 方法后，再来看 take 方法，发现也是非常简单的，队列中有元素，直接提取，
-没有元素则线程阻塞(可中断的阻塞)，将该线程加入到 notEmpty 条件对象的等待队列中；
-等有新的 put 线程添加了数据，分析发现，会在 put 操作中唤醒 notEmpty 条件对象的等待队列中的 take 线程，
-去执行 take 操作。具体操作如下图：
+其实分析完阻塞添加 put 方法后，再来看 take 方法，发现也是非常简单的，队列中有元素，直接提取，没有元素则线程阻塞(可中断的阻塞)，将该线程加入到 notEmpty 条件对象的等待队列中；等有新的 put 线程添加了数据，分析发现，会在 put 操作中唤醒 notEmpty 条件对象的等待队列中的 take 线程，去执行 take 操作。
+
+具体操作如下图：
 <img src="https://blog.tommyyang.cn/img/java/datastructure/abq4.png">
 
-通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，
-根据具体的场景使用具体的方法。
+通过以上分析，我们把 poll、take 提取元素的方法分析了，也把 peek 获取元素的方法分析了，我们使用的时候，根据具体的场景使用具体的方法。
 
 分析完提取方法后，我们来分析一下 ArrayBlockingQueue 中的删除元素的 remove 方法。
 

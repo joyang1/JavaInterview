@@ -6,10 +6,7 @@
 
 ### 直接两个List去重  
 
-说到去重，稍微多讲一点啊，去重的时候有点小伙伴可能直接对2500万List foreach循环后直接删除,
-其实这种是错误的(java.util.ConcurrentModificationException)，大家可以自己去试一下；(注: for循环遍历删除不报错，但是效率低，不推荐使用)
-首先你需要去看下foreach和迭代器的实现。foreach的实现就是用到了迭代器，所以你在foreach的时候对list进行删除操作，
-迭代器Iterator无法感知到list删除了，所以会报错。直接贴代码解释下。
+说到去重，稍微多讲一点啊，去重的时候有点小伙伴可能直接对2500万List foreach循环后直接删除,其实这种是错误的(java.util.ConcurrentModificationException)，大家可以自己去试一下；(注: for循环遍历删除不报错，但是效率低，不推荐使用)首先你需要去看下foreach和迭代器的实现。foreach的实现就是用到了迭代器，所以你在foreach的时候对list进行删除操作，迭代器Iterator无法感知到list删除了，所以会报错。直接贴代码解释下。
 
 ArrayList中Iterator的实现:
 ```
@@ -79,12 +76,10 @@ private class Itr implements Iterator<E> {
 }
 
 ```
-通过上述的ArrayList里面的Iterator迭代器的实现我们可以看到:
-基本上ArrayList采用size属性来维护自已的状态，而Iterator采用cursor来来维护自已的状态。
-当你直接在foreach里面对list进行删除操作，size出现变化时，cursor并不一定能够得到同步，除非这种变化是Iterator主动导致的。(调用list.iterator()方法的原因)
+通过上述的ArrayList里面的Iterator迭代器的实现我们可以看到:基本上ArrayList采用size属性来维护自已的状态，而Iterator采用cursor来来维护自已的状态。当你直接在foreach里面对list进行删除操作，size出现变化时，cursor并不一定能够得到同步，除非这种变化是Iterator主动导致的。(调用list.iterator()方法的原因)
 
-从上面的代码可以看到当Iterator.remove方法导致ArrayList列表发生变化时，他会更新cursor来同步这一变化。但其他方式导致的ArrayList变化，Iterator是无法感知的。ArrayList自然也不会主动通知Iterator们，那将是一个繁重的工作。Iterator到底还是做了努力：为了防止状态不一致可能引发的无法设想的后果，Iterator会经常做checkForComodification检查，以防有变。如果有变，则以异常抛出，所以就出现了上面的异常。
-如果对正在被迭代的集合进行结构上的改变（即对该集合使用add、remove或clear方法），那么迭代器就不再合法（并且在其后使用该迭代器将会有ConcurrentModificationException异常被抛出）.
+从上面的代码可以看到当Iterator.remove方法导致ArrayList列表发生变化时，他会更新cursor来同步这一变化。但其他方式导致的ArrayList变化，Iterator是无法感知的。ArrayList自然也不会主动通知Iterator们，那将是一个繁重的工作。Iterator到底还是做了努力：为了防止状态不一致可能引发的无法设想的后果，Iterator会经常做checkForComodification检查，以防有变。如果有变，则以异常抛出，所以就出现了上面的异常。如果对正在被迭代的集合进行结构上的改变（即对该集合使用add、remove或clear方法），那么迭代器就不再合法（并且在其后使用该迭代器将会有ConcurrentModificationException异常被抛出）。
+
 如果使用迭代器自己的remove方法，那么这个迭代器就仍然是合法的。
 
 
@@ -202,11 +197,9 @@ for (String item: maxArrayList) {
 ```
 
 ### 总结
-通过上述测试我们可以看出，有时候我们排重的时候，不一定要拍完重再对排重后的数据进行遍历，可以在遍历的过程中进行排重，注意用来排重的那个集合放到Set中，
-可以是HashSet,或者其他Set(推荐使用HashSet),因为Set的contains效率更高，比list高很多。
+通过上述测试我们可以看出，有时候我们排重的时候，不一定要拍完重再对排重后的数据进行遍历，可以在遍历的过程中进行排重，注意用来排重的那个集合放到Set中，可以是HashSet,或者其他Set(推荐使用HashSet),因为Set的contains效率更高，比list高很多。
 
-然后考虑到如果非要拿到去重后的list，考虑使用方案3《List结合Set去重(不是直接对list进行删除，而是组装新list，考虑到list删除效率低)》，通过测试，这种方法效率也是非常的高。
-与方案4相比，稍微慢一点点。
+然后考虑到如果非要拿到去重后的list，考虑使用方案3《List结合Set去重(不是直接对list进行删除，而是组装新list，考虑到list删除效率低)》，通过测试，这种方法效率也是非常的高。与方案4相比，稍微慢一点点。
 
 对于上述方案1，测试也使用过组装新list的方式，而不是list.remove。但是效率还是比较慢。
 

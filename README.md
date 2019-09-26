@@ -2,8 +2,9 @@
 [![Build Status](https://travis-ci.org/joyang1/JavaInterview.svg?branch=master)](https://travis-ci.org/joyang1/JavaInterview)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-**该项目主要分享一些个人经验，以及一些个人项目中遇到的问题；**
-还有就是一些读书笔记。
+**该项目主要分享一些个人经验，以及一些个人项目中遇到的问题**；还有就是一些读书笔记。
+
+如果大家觉得该项目还不错，可以帮忙 `star` 或者 fork 下，你的 `star` 就是我的动力，谢谢！
 
 **为开源贡献自己的一份力量。**
 
@@ -55,11 +56,12 @@
   
   
 # Author
-联系我：tingzai.yang@gmail.com <br/>
-[个人博客](https://blog.tommyyang.cn) <br/>
-有任何问题，或者好的建议，好的面试相关的题目都可以在这里面进行提交！<br/>
-有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)
+联系我：tingzai.yang@gmail.com 
 
-如果大家觉得不错，可以帮忙 star 或者 fork 下，谢谢！
+[个人博客](https://blog.tommyyang.cn) 
+
+有任何问题，或者好的建议，好的面试相关的题目都可以在这里面进行提交！
+
+有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)
 
 

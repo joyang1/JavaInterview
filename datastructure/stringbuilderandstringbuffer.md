@@ -1,9 +1,7 @@
 # StringBuffer 和 StringBuilder
 
 ## 介绍
-大多数情况下， StringBuffer 的速度要比 String 快； StringBuilder  要比StringBuffer快；
-StringBuffer 和 StringBuilder 都是 AbstractStringBuilder 的子类，区别在于StringBuffer
-的方法大部分都有 synchronized 修饰。<br/>
+大多数情况下， StringBuffer 的速度要比 String 快； StringBuilder  要比StringBuffer快；StringBuffer 和 StringBuilder 都是 AbstractStringBuilder 的子类，区别在于StringBuffer 的方法大部分都有 synchronized 修饰。
 
 ## 源码解析
 
@@ -80,11 +78,7 @@ private int hugeCapacity(int minCapacity) {
 }
 ```
 
-扩容的方法最终由 `newCapacity()`  实现的，首先将容量左移一位（即扩大2倍）同时加2，如果此时任小于指定的容量，
-那么就将容量设置为 `minimumCapacity` 。
-然后判断是否溢出，通过 `hugeCapacity` 实现，如果溢出了（长度大于 `Integer.MAX_VALUE` ），则抛错（ `OutOfMemoryError` ）；
-否则根据 `minCapacity` 和 `Integer.MAX_VALUE - 8` 的大小比较确定数组容量为 `max(minCapacity, Integer.MAX_VALUE - 8)`。
-最后将 `value`  值进行拷贝，这一步显然是最耗时的操作。
+扩容的方法最终由 `newCapacity()`  实现的，首先将容量左移一位（即扩大2倍）同时加2，如果此时任小于指定的容量，那么就将容量设置为 `minimumCapacity` 。然后判断是否溢出，通过 `hugeCapacity` 实现，如果溢出了（长度大于 `Integer.MAX_VALUE` ），则抛错（ `OutOfMemoryError` ）；否则根据 `minCapacity` 和 `Integer.MAX_VALUE - 8` 的大小比较确定数组容量为 `max(minCapacity, Integer.MAX_VALUE - 8)`。最后将 `value`  值进行拷贝，这一步显然是最耗时的操作。
 
 #### append() 方法
 
@@ -127,18 +121,14 @@ private AbstractStringBuilder appendNull() {
 - 为什么每次扩容是扩容为原来的两倍？
 个人觉得是为了避免经常扩容带来的成本消耗。
 - 为什么会加2呢？
-个人也没想出什么好的解释，觉得可能是因为 `Java` 开发者认为我们在 `append` 数据的时候，中间经常会加一个分隔符，
-恰好这个分隔符在 `Java` 中正好占用两个字节。也不知道分析的对不对，有其他意见的大佬们可以在 [issue](https://github.com/joyang1/JavaInterview/issues/2)
+个人也没想出什么好的解释，觉得可能是因为 `Java` 开发者认为我们在 `append` 数据的时候，中间经常会加一个分隔符，恰好这个分隔符在 `Java` 中正好占用两个字节。也不知道分析的对不对，有其他意见的大佬们可以在 [issue](https://github.com/joyang1/JavaInterview/issues/2)
 中进行讨论。
 
 
 ### StringBuilder 与 StringBuffer 方法对比
 
-通过查看源码分析发现两者都继承至 `AbstractStringBuilder` 。 而 `StringBuffer` 之所以是线程安全的，
-是因为重写 `AbstractStringBuilder` 的方法的时候在前面加上了 `synchronzied` 修饰这些方法；
-而 `StringBuilder` 重写的时候只是直接调用父类的方法，没有做其他的操作。
+通过查看源码分析发现两者都继承至 `AbstractStringBuilder` 。 而 `StringBuffer` 之所以是线程安全的，是因为重写 `AbstractStringBuilder` 的方法的时候在前面加上了 `synchronzied` 修饰这些方法；而 `StringBuilder` 重写的时候只是直接调用父类的方法，没有做其他的操作。
 
-其实通过阅读源码发现 `StringBuilder` 和 `StringBuffer` 之间的关系，类似于 `HashMap` 和 `HashTable`
-之间的关系。
+其实通过阅读源码发现 `StringBuilder` 和 `StringBuffer` 之间的关系，类似于 `HashMap` 和 `HashTable` 之间的关系。
 
 

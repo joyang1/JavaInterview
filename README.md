@@ -62,6 +62,6 @@
 
 有任何问题，或者好的建议，好的面试相关的题目都可以在这里面进行提交！
 
-有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)
+有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)。
 
 

@@ -50,10 +50,21 @@ Parallel Scavenge 收集器的特点是它的关注点与其他收集器不同�
 停顿时间越短越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高效率则可以高效率地利用 CPU 时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务。
 
 ## Serial Old 收集器
+Serial Old 是 Serial 收集器的老年代版本，它同样是一个单线程收集器，使用"标记-整理"算法。该收集器的主要意义也是在于给 Client 模式下的虚拟机使用。在 Server 模式下，它还有两大用途：一种用途是在 JDK 1.5 以及之前的版本中与 Parallel Scavenge 收集器搭配使用，另一种用途就是作为 CMS 收集器的后备方案，在并发收集发生 Concurrent Mode Failure 时使用。
 
 ## Parallel Old 收集器
+Parallel Old 是 Parallel Scavenge 收集器的老年代版本，使用多线程和"标记-整理"算法。 
 
 ## CMS 收集器
+CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的 Java 应用集中在互联网站或者 B/S 系统的服务端上，这类应用尤其重视服务的响应速度，希望系统停顿时间最短，给用户带来较好的体验（CMS 非常符合这类需求）。
+
+CMS 的**收集过程**分为如下 4 个步骤：
+- 初始标记（CMS initial mark）
+- 并发标记（CMS concurrent mark）
+- 重新标记（CMS remark）
+- 并发清除（CMS concurrent sweep）
+
+其中，初始标记和重新标记这两个步骤仍需"Stop The World"。
 
 ## G1 收集器
 

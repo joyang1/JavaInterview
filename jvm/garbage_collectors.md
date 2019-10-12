@@ -106,10 +106,10 @@ G1 是一款面向服务端应用的垃圾回收器。HotSpot 开发团队赋予
     
 G1 具体收集器的过程：
 
-- 初始标记
-- 并发标记
-- 最终标记
-- 筛选回收
+- 初始标记（Initial Marking）
+- 并发标记（Concurrent Marking）
+- 最终标记（Final Marking）
+- 筛选回收（Live Data Counting and Evacuation）
 
 
 # 收集器中使用的参数列表

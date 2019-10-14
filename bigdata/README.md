@@ -1,5 +1,9 @@
 # 大数据篇
 
-## 集合(大数据量)
-海量数据去重数据结构选择：
-[list_set](maxlist_set.md)
+## 集合
+[海量数据去重](maxlist_set.md)
+
+## Hadoop 平台
+
+## 消息队列
+[Kafka 内部结构详解](kafka_1.md)

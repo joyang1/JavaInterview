@@ -1,12 +1,15 @@
 # Hadoop 架构
-1
 
 ## Hadoop 组成
 - HDFS
 - MapReduce
 - Yarn (2.0 版本引入)
 
-##  
+## HDFS
+
+## MapReduce
+
+## Yarn
 
 
 ## 例子

@@ -35,3 +35,46 @@ Ioc Service Provider 是抽象出来的一个概念，它指代任何将 IoC 场
     对于 IoC 来说，这个职责是最艰巨也是最重要的，这是它的使命之所在。IoC Service Provider 通过结合之前构建和管理的
     所有业务对象，以及各个业务间可以识别的依赖关系，将这些对象所依赖的对象注入绑定，从而保证每个业务对象在使用的时候，可以
     处于就绪状态。
+    
+## Spring IoC 容器
+- BeanFactory（Spring 的 Ioc Service Provider）
+    
+    基础类型 IoC 容器，提供完整的 IoC 服务支持。如果没有特殊指定，默认采用延迟初始化策略（`lazy-load`）。
+    
+- ApplicationContext
+
+    ApplicationContext 在 BeanFactory 的基础上构建，是相对比较高级的容器实现，拥有 BeanFactory 的所有支持，还提供其它高级特性，
+    包括事件发布、国际化信息支持等。
+
+Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持：
+- 对象生命周期管理
+- 线程管理
+- 企业服务集成
+- 查找服务
+- AOP 支持
+
+### BeanFactory 的对象注册与依赖绑定方式
+
+- 直接编码方式
+    
+    相关类：DefaultListableBeanFactory 间接地实现了 BeanFactory 接口和 BeanDefinitionRegistry 接口。其中 BeanDefinitionRegistry 接口才是
+    在 BeanFactory 的实现中担当 Bean 注册管理的角色。
+    举例说明下：
+    BeanFactory - 图书馆
+    BeanDefinitionRegistry - 书架
+    BeanDefinition - 各种各样的书
+
+- 外部配置文件方式
+    
+    - properties 文件 (PropertiesBeanDefinitionReader)
+    - xml 文件 (XmlBeanDefinitionReader)
+    - 自定义文件（自己实现 BeanDefinitionReader 接口）
+    
+- 注解方式
+    
+    - @Service
+    - @Autowired
+    
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com.dianping"/> 然后通过设置自动扫描就行了。
+    

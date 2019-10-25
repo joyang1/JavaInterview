@@ -75,6 +75,12 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
     - @Service
     - @Autowired
     
-    <mvc:annotation-driven/>
-    <context:component-scan base-package="com.dianping"/> 然后通过设置自动扫描就行了。
+    然后在 xml 中添加上如下配置即可，这样就可以自动扫描相关注解，添加 Bean 到 BeanFactory 中。
+    ```xml
+        <xml>
+              <mvc:annotation-driven/>
+              <context:component-scan base-package="cn.tommyyang"/> 
+        </xml>
+    ```
+    
     

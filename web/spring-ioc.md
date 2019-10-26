@@ -83,4 +83,31 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
         </xml>
     ```
     
+### BeanFactory 之 xml 配置
+所有注册到容器的业务对象，在 Spring 称之为 bean。故每一个对象在 xml 中的映射也自然地对应一个 <bean> 的元素。而把这些 <bean> 元素组织起来的就是 <beans>。
+
+bean 作为 xml 配置文件中最顶层的元素，拥有如下几个元素：
+- <description> 0 个或 1 个 
+- <bean> 0 个 或 多个
+- <import>
+- <alias>
+
+beans 对 bean 进行管理的属性如下：
+- **default-lazy-init**
+    
+    其值可以为 true 或 false，默认值为 false。用来标志对所有的 <bean> 进行延迟初始化。
+    
+- **default-autowire**
+
+    可以取值为 no、byName、byType、constructor以及 autodetect。默认值为 no，如果使用自动绑定的话，用来标志全体 bean 使用哪一种默认绑定方式。
+    
+- **default-init-method**
+    
+    如果下面的所有 <bean> 元素按照某种规则，都有同样初始化方法的方法名，那么可以使用这个属性去统一设置。
+
+- **default-destroy-method**
+    
+    与 default-init-method 相对应，如果下面的所有 <bean> 元素按照某种规则，都有同样对象销毁方法的方法名，那么可以使用该属性统一设置。
+
+    
     

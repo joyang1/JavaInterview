@@ -12,25 +12,48 @@ MySQL 是我们日常开发中用到的最多的关系型数据库，我们需�
 ### 优化之EXPLAIN
 使用 EXPLAIN 可以帮助分析自己写的 SQL 语句，看看我们是否用到了索引。
 
+#### 按以下两个 SQL 新建两张表
+```sql
+
+CREATE TABLE `demo` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(64) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'demo name',
+  `author` varchar(64) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'demo author',
+  PRIMARY KEY (`ID`),
+  KEY `IX_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `demo_details` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `demoId` int(11) unsigned NOT NULL COMMENT 'demo id',
+  `url` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'demo author',
+  PRIMARY KEY (`ID`),
+  KEY `FIX_demoId_ID` (`demoId`),
+  CONSTRAINT `demo_details_ibfk_1` FOREIGN KEY (`demoId`) REFERENCES `demo` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+```
+
 #### 具体用法
 
 ```
-mysql> EXPLAIN SELECT * FROM tbl_name WHERE FALSE\G
+mysql> EXPLAIN SELECT * FROM deml WHERE ID = 1\G
 
 执行结果：
 
 id: 1
 select_type: SIMPLE
-table: tbl_name
+table: demo
 partitions: NULL
-type: ALL
-possible_keys: NULL
-key: NULL
-key_len: NULL
-ref: NULL
-rows: 1693
-filtered: 19.00
-Extra: Using where
+type: const
+possible_keys: PRIMARY
+key: PRIMARY
+key_len: 4
+ref: const
+rows: 1
+filtered: 100.00
+Extra: NULL
+1 row in set, 1 warning (0.00 sec)
 
 ```
 
@@ -74,25 +97,138 @@ Extra: Using where
 - eq_ref
     
     此类型通常出现在多表的 join 查询，表示对于前表的每一个结果，都只能匹配到后表的一行结果，并且查询的比较操作通常是 =，查询效率较高。
+    demo 如下：
+    ```
+  
+    mysql>EXPLAIN select * from demo,demo_details where demo.ID = demo_details.demoId\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo_details
+       partitions: NULL
+             type: ALL
+    possible_keys: FIX_demoId_ID
+              key: NULL
+          key_len: NULL
+              ref: NULL
+             rows: 1
+         filtered: 100.00
+            Extra: NULL
+    *************************** 2. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: eq_ref
+    possible_keys: PRIMARY
+              key: PRIMARY
+          key_len: 4
+              ref: springdemo.demo_details.demoId
+             rows: 1
+         filtered: 100.00
+            Extra: NULL
+    2 rows in set, 1 warning (0.00 sec)
+  
+    ```
     
 - ref
     
     此类型通常出现在多表的 join 查询，针对于非唯一或非主键索引，或者是使用了**最左前缀**规则索引的查询。
     
+    ```
+  
+    mysql> EXPLAIN select * from demo where name='tommy'\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: ref
+    possible_keys: IX_name
+              key: IX_name
+          key_len: 258
+              ref: const
+             rows: 1
+         filtered: 100.00
+            Extra: NULL
+    1 row in set, 1 warning (0.00 sec)
+
+    ```
+    
 - range
 
     表示使用索引范围查询，通过索引字段范围获取表中部分数据记录，这个类型通常出现在 =、 <>、 >、 >=、 <、 <=、 IS NULL、 <=>、 BETWEEN、 IN 操作中。
     当 type 是 range 时，那么 EXPLAIN 输出的 ref 字段为 NULL, 并且 key_len 字段是此次查询中使用到的索引的最长的那个。
+    demo 如下：
+    ```
+  
+    mysql> EXPLAIN select * from demo where id between 1 and 2\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: range
+    possible_keys: PRIMARY
+              key: PRIMARY
+          key_len: 4
+              ref: NULL
+             rows: 2
+         filtered: 100.00
+            Extra: Using where
+    1 row in set, 1 warning (0.00 sec)
+ 
+    ```
     
 - index
     
     表示全索引扫描(full index scan)，和 ALL 类型类似，只不过 ALL 类型是全表扫描，而 index 类型则仅仅扫描所有的索引，而不扫描数据。
     index 类型通常出现在：所要查询的数据直接在索引树中就可以获取到，而不需要扫描数据。当是这种情况时，Extra 字段 会显示 Using index。
+    demo 如下：
+    ```
+  
+    mysql> EXPLAIN select name from demo\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: index
+    possible_keys: NULL
+              key: IX_name
+          key_len: 258
+              ref: NULL
+             rows: 2
+         filtered: 100.00
+            Extra: Using index
+    1 row in set, 1 warning (0.00 sec)
+
+    ```
     
 - ALL
 
     表示全表扫描，这个类型的查询是性能最差的查询之一。通常来说，我们的查询不应该出现 ALL 类型的查询，因为这样的查询在数据量大的情况下，对数据库的性能是巨大的灾难。
     如一个查询是 ALL 类型查询，那么一般来说可以对相应的字段添加索引来避免。
+    demo 如下：
+    ```
+  
+    mysql> EXPLAIN select * from demo\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: ALL
+    possible_keys: NULL
+              key: NULL
+          key_len: NULL
+              ref: NULL
+             rows: 2
+         filtered: 100.00
+            Extra: NULL
+    1 row in set, 1 warning (0.00 sec)
+
+    ```
     
 #### type 类型的性能比较
 通常来说, 不同的 type 类型的性能关系如下:
@@ -138,11 +274,51 @@ rows 也是一个重要的字段。MySQL 查询优化器根据统计信息，估
 EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以下几种内容：
 - Using filesort
 
-    当 Extra 中有 Using filesort 时，表示 MySQL 需额外的排序操作，不能通过索引顺序达到排序效果。一般有 Using filesort，都建议优化去掉，因为这      样的查询 CPU 资源消耗大。
+    当 Extra 中有 Using filesort 时，表示 MySQL 需额外的排序操作，不能通过索引顺序达到排序效果。一般有 Using filesort，都建议优化去掉，因为这样的查询 CPU 资源消耗大。
+    demo 如下：
+    ```
+    
+    mysql> EXPLAIN select * from demo order by name\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: ALL
+    possible_keys: NULL
+              key: NULL
+          key_len: NULL
+              ref: NULL
+             rows: 2
+         filtered: 100.00
+            Extra: Using filesort
+    1 row in set, 1 warning (0.00 sec)  
+  
+    ```
 
 - Using index
 
     **覆盖索引扫描**，表示查询在索引树中就可查找所需数据，不用扫描表数据文件，往往说明性能不错。
+    demo 如下：
+    ```
+    
+    mysql> EXPLAIN select * from demo order by id desc\G;
+    *************************** 1. row ***************************
+               id: 1
+      select_type: SIMPLE
+            table: demo
+       partitions: NULL
+             type: index
+    possible_keys: NULL
+              key: PRIMARY
+          key_len: 4
+              ref: NULL
+             rows: 2
+         filtered: 100.00
+            Extra: Backward index scan
+    1 row in set, 1 warning (0.00 sec)
+  
+    ```
 
 - Using temporary
 

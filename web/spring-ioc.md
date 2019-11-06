@@ -86,13 +86,13 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
 ### BeanFactory 之 xml 配置
 所有注册到容器的业务对象，在 Spring 称之为 bean。故每一个对象在 xml 中的映射也自然地对应一个 <bean> 的元素。而把这些 <bean> 元素组织起来的就是 <beans>。
 
-beans 作为 xml 配置文件中最顶层的元素，拥有如下几个元素：
+#### beans 作为 xml 配置文件中最顶层的元素，拥有如下几个元素：
 - description 0 个或 1 个 
 - bean 0 个 或 多个
 - import
 - alias
 
-beans 对 bean 进行管理的属性如下：
+#### beans 对 bean 进行管理的属性
 - **default-lazy-init**
     
     其值可以为 true 或 false，默认值为 false。用来标志对所有的 <bean> 进行延迟初始化。
@@ -108,6 +108,20 @@ beans 对 bean 进行管理的属性如下：
 - **default-destroy-method**
     
     与 default-init-method 相对应，如果下面的所有 <bean> 元素按照某种规则，都有同样对象销毁方法的方法名，那么可以使用该属性统一设置。
+    
+#### bean 的相关属性
+- id 对象注册到容器的唯一标志，就跟人的身份证号码一样（重复的话就非常麻烦）。
 
+- name 很灵活，name 可以使用 id 不能使用的一些字符，也可以空格、逗号或者冒号分割来给一个 bean 指定多个 name。name 的作用跟 alias 为 id 指定多个别名基本累似。demo 如下：
+    
+    ```
+    <bean id="bean1" name="/b1,b2" class="..impl.bean1Impl">
+    </bean>
+  
+    <alias name="bean1" alias="/b1">
+    <alias name="bean1" alias="b2">
+    ```
+  
+- class 通过 class 指定注册到容器的对象的类型，也就是对象的具体 class 路径。
     
     

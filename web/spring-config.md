@@ -15,8 +15,15 @@ Spring 配置的方式可以分为：
     - @Repository
     - @Component
     - @Autowired 
+    - @ModelAttribute
+    - @RequestBody
+    - @PathVariable
+    - @RequestParam
+    - @ResponseBody
     
 - Java 注解
+    
+    - @Resource
 
 ## Spring 在 xml 如何配置 Map、List
 1. 使用 `xmlns:util="http://www.springframework.org/schema/util` 在 xml 中配置 map 和 list 的 bean。

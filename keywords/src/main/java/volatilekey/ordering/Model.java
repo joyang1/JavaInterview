@@ -5,7 +5,7 @@ package volatilekey.ordering;
  */
 public class Model {
 
-    public static int a = 10;
+    public volatile static int a;
     public static int b = 1;
     public static int c = 2;
     public static int d = 3;

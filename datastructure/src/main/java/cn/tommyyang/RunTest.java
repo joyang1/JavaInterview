@@ -13,7 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RunTest {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        runForkJoinPool();
+//        runForkJoinPool();
+
+        Thread t = new Thread(()->
+            System.out.println("aa")
+        );
+
+        t.start();
+        t.start();
     }
 
     private static void runForkJoinPool() throws ExecutionException, InterruptedException {
@@ -27,9 +34,12 @@ public class RunTest {
 
         Future<Integer> r1 = forkJoinPool.submit(countTask);
         System.out.println(r1.get());
-
+        ExecutorService service = Executors.newWorkStealingPool(1);
+        service.execute(() -> System.out.println("aa"));
+//        ThreadPoolExecutor
 //        Math
 //        LinkedBlockingQueue
 //        HashMap
+
     }
 }

@@ -6,6 +6,7 @@ import cn.tommyyang.model.Pear;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @Author : TommyYang
@@ -38,6 +39,8 @@ public class ProgressDemo {
     }
 
     public static void main(String[] args) {
+        IntStream.range(0, 10).forEach(System.out::println);
+//        Collection
 
 //        test1();
 
@@ -45,7 +48,7 @@ public class ProgressDemo {
 
 //        test3();
 
-        test3_();
+//        test3_();
 
 //        test4();
 
@@ -106,6 +109,7 @@ public class ProgressDemo {
 
         apples.stream().filter(predicate1).forEach(System.out::println);
         apples.stream().filter(predicate1.negate()).forEach(System.out::println);
+
     }
 
     // group by

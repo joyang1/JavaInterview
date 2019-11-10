@@ -26,8 +26,9 @@ public class StreamAPI {
     }
 
     public static void main(String[] args) {
-        testDisplay();
+//        testDisplay();
 //        testAdd();
+        streamDisplay();
     }
 
     public static void testAdd() {
@@ -83,14 +84,16 @@ public class StreamAPI {
 
     public static void streamDisplay() {
 //       stream.forEach(System.out::println);
-        stream.forEach(item -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(item);
-        });
+//        stream.forEach(item -> {
+//            try {
+//                Thread.sleep(500);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println(item);
+//        });
+
+        addItems.forEach(System.out::println);
 
         System.out.println("stream display end ------");
     }

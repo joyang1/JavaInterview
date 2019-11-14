@@ -419,12 +419,12 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 #### 发送复制事件到其它的备库
 当设置 log_slave_updates 时，你可以让 slave 扮演其它 slave 的 master。此时，slave 把 SQL 线程执行的事件写进行自己的二进制日志（binary log），然后，它的 slave 可以获取这些事件并执行它。
 
-<img src="https://blog.tommyyang.cn/img/java/architecture/master-slave.png">
+<img src="https://blog.tommyyang.cn/img/architecture/master-slave.png">
 
 #### 复制过滤器
 复制过滤可以让你只复制服务器中的一部分数据，有两种复制过滤：在 master 上过滤二进制日志中的事件；在 slave 上过滤中继日志中的事件。
 
-<img src="https://blog.tommyyang.cn/img/java/architecture/mysql-filter.png">
+<img src="https://blog.tommyyang.cn/img/architecture/mysql-filter.png">
 
 
 

@@ -326,7 +326,7 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
     
 - Using where
 
-    列数据是从仅仅使用了索引中的信息而没有读取实际的行动的表返回的，这发生在对表的全部的请求列都是同一个索引的部分的时候，表示 MySQL 服务器将在存储引擎检索行后再进行过滤。
+    列数据是从仅仅使用了索引中的信息而没有读取实际行的表返回的，这发生在对表的全部的请求列都是同一个索引的部分的时候，表示 MySQL 服务器将在存储引擎检索行后再进行过滤。
     
 
 ## 锁总结
@@ -349,7 +349,22 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 读写分离可以提高系统的效率，特别是对于写少读多的系统，使用读写分离可以大大提高系统的效率。这也是从库会有多个的原因，读的时候可以做负载均衡（可以通过主健或者用户 id 等 hash 的方式，也可以使用 Round Robin 轮询算法；负载均衡算法有很多种，这里就不一一列举），让读请求分布到不同的从库上，提高读请求的效率。
 
 ## 主从复制
-基于主从复制可以实现高可用。也可以避免单点失效问题。
+- 数据分布
+- 负载平衡（Load Balancing）
+- 备份
+- 高可用性（High Availability）和容错
+
+### 相关命令
+- show status 查看整个 mysql 状态，这个命令也可以看到 Seconds_Behind_Master。
+- show master status 查看主库信息
+- show slave status  查看从库信息
+    
+    查看参数 Seconds_Behind_Master 来看主从是否延迟。 
+    - 0：该值为零，是我们极为渴望看到的情况，表示主从复制良好，可以认为lag不存在。
+    - 正值：表示主从已经出现延时，数字越大表示从库落后主库越多。
+    - 负值：几乎很少见，我只是听一些资深的DBA说见过，其实，这是一个BUG值，该参数是不支持负值的，也就是不应该出现。
+    
+- show processlist 查看数据库线程列表信息
 
 ### 原理
 
@@ -363,8 +378,53 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 **缺点**
 - 执行语句的时间不同。（机器的 CPU 和内存可能很不一样）
 - 还有一些动态数据，比如 `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`，还有一些使用函数的语句，比如包含 `CURRENT_USER` 的语句。
-- 更新是串行的。
+- 更新是串行的。(需要考虑锁带来的性能消耗)
 
+#### 基于行的复制
+在 MySQL5.1 开始支持基于行的复制，这种方式会将实际的数据记录到二进制日志中。
+
+**优点**
+- 可以正确的复制每一行。（不存在基于语句的复制出现的那种问题）
+
+- 可以更高效地复制数据。（备库不用重放 MySQL 的事件，这个也是针对具体的 SQL，有的 SQL 可以提高效率，有的确会降低效率。）
+    ```sql
+    insert into tab1 (col1, col2, sum_col3) select col1, col2, sum(col1, col2) from tab2 group by col1, col2; # 基于行的复制只需要把插入结果记录下来
+    
+    update tab3 set col1 = 0; // 基于行的复制就要在二进制中记录全表的数据
+    ```
+- 有利于数据的恢复
+
+**缺点**
+- 无法判断数据库做了什么，因为不知道执行的 SQL。
+- 针对上述全表数据更新的时候，效率会很低。
+
+#### 复制文件
+- mysql-bin.index
+    
+    该文件是 MySQL 用来识别具体的二进制 binlog 文件；该文件记录磁盘上 binlog 文件。
+    
+- mysql-relay-bin.index
+
+    中继日志的索引文件。跟 mysql-bin.index 作用类似。
+    
+- master.info
+    
+    保存备库连接到主库所需要的信息，格式为纯文本。这个文件以文本的方式记录了复制用户的密码。故要注意该文件的权限。
+    
+- relay-log.info
+    
+    包含当前备库复制的二进制日志和中继日志的坐标（及备库复制到主库的具体位置）。
+    
+    
+#### 发送复制事件到其它的备库
+当设置 log_slave_updates 时，你可以让 slave 扮演其它 slave 的 master。此时，slave 把 SQL 线程执行的事件写进行自己的二进制日志（binary log），然后，它的 slave 可以获取这些事件并执行它。
+
+<img src="https://blog.tommyyang.cn/img/java/architecture/master-slave.png">
+
+#### 复制过滤器
+复制过滤可以让你只复制服务器中的一部分数据，有两种复制过滤：在 master 上过滤二进制日志中的事件；在 slave 上过滤中继日志中的事件。
+
+<img src="https://blog.tommyyang.cn/img/java/architecture/mysql-filter.png">
 
 
 

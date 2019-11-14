@@ -424,7 +424,7 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 #### 复制过滤器
 复制过滤可以让你只复制服务器中的一部分数据，有两种复制过滤：在 master 上过滤二进制日志中的事件；在 slave 上过滤中继日志中的事件。
 
-<img src="https://blog.tommyyang.cn/img/architecture/mysql-filter.png">
+<img src="https://blog.tommyyang.cn/img/architecture/msyql-filter.png">
 
 
 

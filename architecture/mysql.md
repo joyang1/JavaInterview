@@ -445,7 +445,7 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 #### 复制过滤器
 复制过滤可以让你只复制服务器中的一部分数据，有两种复制过滤：在 master 上过滤二进制日志中的事件；在 slave 上过滤中继日志中的事件。
 
-<img src="https://blog.tommyyang.cn/img/architecture/msyql-filter.png">
+<img src="https://blog.tommyyang.cn/img/architecture/mysql-filter.png">
 
 ## 读写分离
 基于主从复制架构，简单来说，就搞一个主库，挂多个从库，然后我们就单单只是写主库，然后主库会自动把数据给同步到从库上去。

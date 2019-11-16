@@ -347,6 +347,18 @@ EXPLAIN 中的很多额外的信息会在 Extra 字段显示，常见的有以�
 #### 切分大查询
 一个大查询如果一次性执行的话，可能一次锁住很多数据、占满整个事务日志、耗尽系统资源、阻塞很多小的但重要的查询。
 
+```SQL
+
+DELETE FROM messages WHERE create < DATE_SUB(NOW(), INTERVAL 12 MONTH);
+rows_affected = 0
+do {
+    rows_affected = do_query(
+    "DELETE FROM messages WHERE create  < DATE_SUB(NOW(), INTERVAL 12 MONTH) LIMIT 5000")
+} while rows_affected > 0
+
+```
+
+
 #### 分解大连接查询
 将一个大连接查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联，这样做的好处有：
 - 让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用。

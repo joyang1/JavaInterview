@@ -140,3 +140,16 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
     
     - 自定义 scope
     
+ #### Spring 容器之 ApplicationContext
+ 作为 Spring 提供的较之 BeanFactory 更为先进的 IoC 容器实现，ApplicationContext 除了拥有 BeanFactory 的所有功能外，还进一步扩展了基本容器的功能，包括 BeanFactoryPostProcessor、BeanPostProcessor 以及其他特殊类型 bean 的自动识别、容器启动后 bean 实例的自动初始化、国际化的信息支持、容器内时间发布等。
+ 
+ Spring 为 BeanFactory 类型容器提供了 XmlBeanFactory 实现。相应地，它也为 ApplicationContext 类型容器提供了一下几个常用实现。
+ - FileSystemXmlApplicationContext
+    
+    在默认情况下，从文件系统加载 bean 定义以及相关资源的 ApplicationContext 实现。
+    
+ - ClassPathXmlApplicationContext
+    
+    在默认情况下，从 Classpath 加载 bean 定义以及相关资源的 ApplicationContext 实现。
+ 
+ - XmlWebApplicationContext

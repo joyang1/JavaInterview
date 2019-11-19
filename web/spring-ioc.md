@@ -140,7 +140,7 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
     
     - 自定义 scope
     
- #### Spring 容器之 ApplicationContext
+ ### Spring 容器之 ApplicationContext
  作为 Spring 提供的较之 BeanFactory 更为先进的 IoC 容器实现，ApplicationContext 除了拥有 BeanFactory 的所有功能外，还进一步扩展了基本容器的功能，包括 BeanFactoryPostProcessor、BeanPostProcessor 以及其他特殊类型 bean 的自动识别、容器启动后 bean 实例的自动初始化、国际化的信息支持、容器内时间发布等。
  
  Spring 为 BeanFactory 类型容器提供了 XmlBeanFactory 实现。相应地，它也为 ApplicationContext 类型容器提供了一下几个常用实现。
@@ -153,3 +153,28 @@ Spring IoC 容器不仅提供了 IoC 支持，还提供了 IoC 之外的支持�
     在默认情况下，从 Classpath 加载 bean 定义以及相关资源的 ApplicationContext 实现。
  
  - XmlWebApplicationContext
+ 
+    Spring 提供的用于 Web 应用程序的 ApplicationContext 实现。
+    
+#### Spring 中的 Resource
+Spring 框架内部使用 `org.springframework.core.io.Resource` 接口作为所有资源的抽象和访问接口。比如：
+
+``` java
+
+BeanFactory beanfactory = new XmlBeanFactory(new ClassPathResource("..."));
+
+```
+
+其中 ClassPathResource 就是 Resource 的一个特定类型的实现，代表的是位于 Classpath 里面的资源。
+
+Resource 接口可以根据资源的不同类型，或者资源所处的不同场合，给出相应的具体实现。
+
+- ByteArrayResource。将字节（byte）数组提供的数据作为一种资源进行封装，如果通过 InputStream 形式访问该类型的资源，该实现会根据字节数组的数据，构造相应的 ByteArrayInputStream 并返回。
+
+- ClassPathResource。
+
+- FileSystemResource。
+
+- UrlResource。
+
+- InputStreamResource。

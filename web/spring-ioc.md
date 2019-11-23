@@ -171,10 +171,12 @@ Resource 接口可以根据资源的不同类型，或者资源所处的不同�
 
 - ByteArrayResource。将字节（byte）数组提供的数据作为一种资源进行封装，如果通过 InputStream 形式访问该类型的资源，该实现会根据字节数组的数据，构造相应的 ByteArrayInputStream 并返回。
 
-- ClassPathResource。
+- ClassPathResource。该实现从 Java 应用程序的 ClassPath 中加载具体资源并并进行封装，可以使用指定的类加载器（ClassLoader）或者给定的类进行资源加载。
 
-- FileSystemResource。
+- FileSystemResource。对 java.io.File 类型的封装，故可以以文件或者 URL 的形式对该类型的资源进行访问，只要可以与 File 进行的交互，基本上跟 FileSystemResource 也可以。
 
-- UrlResource。
+- UrlResource。通过 java.net.URL 进行的具体资源查找定位的实现类，内部委派 URL 进行具体的资源操作。
 
-- InputStreamResource。
+- InputStreamResource。将给定的 InputStream 视为一种资源的 Resource 实现类，较为少用。可能的情况下，以 ByteArrayResource 以及其它形式资源取而代之。
+
+`ResourceLoader`

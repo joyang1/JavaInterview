@@ -381,6 +381,12 @@ do {
 
 #### MylSAM 加表锁方法
 
+### 死锁案例分析
+- show variables like 'innodb_deadlock_detect';
+- show status like 'table_locks%';
+- show status like 'innodb_row_lock%';
+- show engine innodb status;
+
 ## 主从复制
 - 数据分布
 - 负载平衡（Load Balancing）

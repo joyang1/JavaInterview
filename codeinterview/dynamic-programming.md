@@ -36,6 +36,26 @@ int f(int n) {
 
 ```
 
+code:
+
+``` java
+
+int f(int n) {
+    if (n == 1) return 1;
+    if (n == 2) return 2;
+    // a 保存倒数第二个子状态数据，b 保存倒数第一个子状态数据， temp 保存当前状态的数据
+    int a = 1, b = 2;
+    int temp = a + b;
+    for (int i = 3; i <= n; i++) {
+        temp = a + b;
+        a = b;
+        b = temp; 
+    }
+    return temp; 
+}
+
+```
+
 ### 从递归到动态规划
 还是以**爬台阶**为例，如果以递归的方式解决的话，那么这种方法的时间复杂度为O(2^n)
 

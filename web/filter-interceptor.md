@@ -21,12 +21,12 @@ Filter 对**用户请求**进行**预处理**，接着将请求交给 Servlet �
     
 - 对于自定义 Controller 的请求分发流程：
     
-    Filter 过滤请求处理。
-    Interceptor 拦截请求处理。
-    对应的 HandlerAdapter 处理请求。
-    Interceptor 拦截响应处理。
-    Interceptor 的最终处理。
-    Filter 过滤响应处理。
+    - Filter 过滤请求处理。
+    - Interceptor 拦截请求处理。
+    - 对应的 HandlerAdapter 处理请求。
+    - Interceptor 拦截响应处理。
+    - Interceptor 的最终处理。
+    - Filter 过滤响应处理。
 
 ## 示例
 更多 web 开发相关示例请关注[spring-demo](https://github.com/joyang1/spring-demo)。

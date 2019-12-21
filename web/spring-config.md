@@ -31,7 +31,10 @@ Spring 配置的方式可以分为：
     - @PreConstruct
     
          被 @PreConstruct 修饰的方法会在服务器卸载 Servlet 的时候运行，并且只会被服务器调用一次，类似于 Servlet 的 destroy() 方法。被 @PreConstruct 修饰的方法会在 destroy() 方法之后运行，在 Servlet 被彻底卸载之前。
-        
+ 
+- 自定义注解(annotation)
+    
+    [参考](https://github.com/joyang1/spring-demo)       
 
 ## Spring 在 xml 如何配置 Map、List
 1. 使用 `xmlns:util="http://www.springframework.org/schema/util` 在 xml 中配置 map 和 list 的 bean。

@@ -34,8 +34,13 @@ Spring 配置的方式可以分为：
  
 - 自定义注解(annotation)
     
-    [参考](https://github.com/joyang1/spring-demo)       
+    [参考](https://github.com/joyang1/spring-demo)  
+    
+### Spring 中 @Autowired, @Resource 和 @Inject 有何差异？  
+三个注释中的两个属于 Java 扩展包：@Resource 属于 javax.annotation.Resource 包和 @Inject 属于 javax.inject.Inject 包。
+@Autowired注解属于org.springframework.beans.factory.annotation包。   
 
 ## Spring 在 xml 如何配置 Map、List
 1. 使用 `xmlns:util="http://www.springframework.org/schema/util` 在 xml 中配置 map 和 list 的 bean。
 2. 使用 Java 自带的 @Resource(name="***") 给具体需要的元素赋值。
+

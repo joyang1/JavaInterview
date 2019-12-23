@@ -41,6 +41,7 @@ Spring 配置的方式可以分为：
 @Autowired注解属于org.springframework.beans.factory.annotation包。 
 
 `@Autowired`
+
 |  特性	  | 说明    |
 | :----: | :----: |
 |  原理	 | 根据类型来自动注入（ByType）|
@@ -49,9 +50,10 @@ Spring 配置的方式可以分为：
 | 解决办法 |	@Autowired配合@Qualifier来使用，通过@Qualifier来指明要注入Bean的name。|
 
 `@Resource`
+
 |  特性	  | 说明    |
 | :----: | :----: |
-|  原理	 |如果指定了name属性, 那么就按name属性的名称装配;<br/>如果没有指定name属性, 那就按照要注入对象的字段名查找依赖对象;<br/>如果按默认名称查找不到依赖对象, 那么就按照类型查找。|
+|  原理	 | 如果指定了name属性, 那么就按name属性的名称装配;<br/>如果没有指定name属性, 那就按照要注入对象的字段名查找依赖对象;<br/>如果按默认名称查找不到依赖对象, 那么就按照类型查找。 |
 | 注入类型 |	既可以注入一个接口，也可以直接注入一个实例 |
 
 ## Spring 在 xml 如何配置 Map、List

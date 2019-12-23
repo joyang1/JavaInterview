@@ -38,7 +38,21 @@ Spring 配置的方式可以分为：
     
 ### Spring 中 @Autowired, @Resource 和 @Inject 有何差异？  
 三个注释中的两个属于 Java 扩展包：@Resource 属于 javax.annotation.Resource 包和 @Inject 属于 javax.inject.Inject 包。
-@Autowired注解属于org.springframework.beans.factory.annotation包。   
+@Autowired注解属于org.springframework.beans.factory.annotation包。 
+
+`@Autowired`
+|  特性	  | 说明    |
+| :----: | :----: |
+|  原理	 | 根据类型来自动注入（ByType）|
+| 注入类型 |	既可以注入一个接口，也可以直接注入一个实例 |
+| 限制	 |  1.当注入一个接口时，这个接口只能有一个实现类，如果存在一个以上的实现类，那么Spring会抛出异常，因为两个同样的接口实现类，它不知道该选择哪一个来注入。<br/>2.当注入一个实例时，跟接口类似，如果这个实例在XML配置文件中声明了两个不同的Bean,那么Spring也会抛出异常。|
+| 解决办法 |	@Autowired配合@Qualifier来使用，通过@Qualifier来指明要注入Bean的name。|
+
+`@Resource`
+|  特性	  | 说明    |
+| :----: | :----: |
+|  原理	 |如果指定了name属性, 那么就按name属性的名称装配;<br/>如果没有指定name属性, 那就按照要注入对象的字段名查找依赖对象;<br/>如果按默认名称查找不到依赖对象, 那么就按照类型查找。|
+| 注入类型 |	既可以注入一个接口，也可以直接注入一个实例 |
 
 ## Spring 在 xml 如何配置 Map、List
 1. 使用 `xmlns:util="http://www.springframework.org/schema/util` 在 xml 中配置 map 和 list 的 bean。

@@ -11,6 +11,7 @@ Spring 配置的方式可以分为：
 - Spring 注解
     
     - @Controller
+    - @RestController
     - @Service
     - @Repository
     - @Component
@@ -18,8 +19,13 @@ Spring 配置的方式可以分为：
     - @ModelAttribute
     - @RequestBody
     - @PathVariable
+    - @RequestMapping
     - @RequestParam
     - @ResponseBody
+    - @ModelAttribute
+    - @Cacheable
+    - @CacheEvict
+    - @Scope
     
 - Java 注解
     

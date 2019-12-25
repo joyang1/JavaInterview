@@ -469,6 +469,16 @@ do {
 基于主从复制架构，简单来说，就搞一个主库，挂多个从库，然后我们就单单只是写主库，然后主库会自动把数据给同步到从库上去。
 读写分离可以提高系统的效率，特别是对于写少读多的系统，使用读写分离可以大大提高系统的效率。这也是从库会有多个的原因，读的时候可以做负载均衡（可以通过主健或者用户 id 等 hash 的方式，也可以使用 Round Robin 轮询算法；负载均衡算法有很多种，这里就不一一列举），让读请求分布到不同的从库上，提高读请求的效率。
 
+## 持久化数据分析
+
+数据InnoDB到磁盘需要经过
+
+- InnoDB buffer pool， Redo log buffer。这个是InnoDB应用系统本身的缓冲。
+- page cache /Buffer cache（可通过o_direct绕过）。这个是vfs层的缓冲。
+- Inode cache/directory buffer。这个也是vfs层的缓冲。需要通过O_SYNC或者fsync()来刷新。
+- Write-Back buffer。(可设置存储控制器参数绕过)
+- Disk on-broad buffer。(可通过设置磁盘控制器参数绕过)
+
 
 
 

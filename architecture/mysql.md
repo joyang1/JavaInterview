@@ -238,7 +238,7 @@ Extra: NULL
     
 #### type 类型的性能比较
 通常来说, 不同的 type 类型的性能关系如下:
-`ALL < index < range ~ index_merge < ref < eq_ref < const < system`
+`ALL < index < range < index_merge < ref < eq_ref < const < system`
 
 ALL 类型因为是全表扫描，因此在相同的查询条件下，它是速度最慢的。
 而 index 类型的查询虽然不是全表扫描，但是它扫描了所有的索引，因此比 ALL 类型的稍快。

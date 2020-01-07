@@ -64,4 +64,6 @@
 
 有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)。
 
+欢迎关注个人公众号，每天更新原创技术好文：
+![](mymp.jpeg)
 

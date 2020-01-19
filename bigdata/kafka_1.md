@@ -1,6 +1,6 @@
 ## kafka的几个重要概念
 
-- `Broker`：消息中间件处理结点，一个 Kafka 节点就是一个 broker，多个 broker 可以组成一个 Kafka 集群；
+- `Broker`：消息中间件处理节点，一个 Kafka 节点就是一个 broker，多个 broker 可以组成一个 Kafka 集群；
 - `Topic`：一类消息，例如 note impression 日志、 click 日志等都可以以 topic 的形式存在，Kafka 集群能够同时负责多个 topic 的分发；
 - `Partition`：topic 物理上的分组，一个 topic 可以分为多个 partition，每个 partition 是一个有序的队；
 - `segment`：每个 partition 又由多个segment file组成；
@@ -44,7 +44,7 @@ topic 与 partition 的关系如下：
 - 查找某个 offset 的时候，是顺序查找。想想，如果文件很大的话，查找的效率就会很低；这个是要解决的。
 
 2. Kakfa 是如何解决上述问题的呢
-通过上述分析发现，如果 Kafka 只有一会文件的话，插入新数据的效率是没问题的；只是在查找的时候，效率很低。
+通过上述分析发现，如果 Kafka 只有一个文件的话，插入新数据的效率是没问题的；只是在查找的时候，效率很低。
 
 `解决办法`
 
@@ -65,7 +65,7 @@ topic 与 partition 的关系如下：
 
 - 相对 offset: 由于数据文件分段以后，除了第一个数据以外，每个数据文件的起始 offset 不为0，相对 offset 表示
 该 message 相对于其所属数据文件中最小的 offset 的大小，即在每个文件中都是从1开始。 然后查找具体 offset 的时候，
-只需要通过二分查找找到具体的在哪个文件中，然后在用 offset - 文件名对应的数值， 即可确定在文件中的相对 offset。
+只需要通过二分查找找到具体的在哪个文件中，然后再用 offset - 文件名对应的数值， 即可确定在文件中的相对 offset。
 存储相对 offset 的好处是*可以减小索引文件占用的空间*。
 
 - position: 表示该条 message 在数据文件中的绝对位置， 只要打开数据文件并移动文件指针到这个 position 就可以

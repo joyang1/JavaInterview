@@ -1,6 +1,8 @@
 # Web 篇
 该篇章我们主要来介绍一些 Web 后端的知识，比如 http 协议， Cookie， Session， Jsp 等。
 
+## [一次完整的HTTP请求过程](http-processing.md)
+
 ## Cookie 详解
 首先我们需要介绍一下，在Web开发过程中为什么会引入Cookie。
 

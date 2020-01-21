@@ -38,7 +38,7 @@ DNS 是应用层协议，事实上他是为其他应用层协议工作的，包�
 
 TCP/IP 是互联网相关的各类协议簇的总称。也有另一种说法 TCP/IP 是 TCP 和 IP 两种协议。 TCP/IP 四层模型如下：
 
-![](https://blog.tommyyang.cn/img/protocal/tcpip-four-model.png)
+![](https://blog.tommyyang.cn/img/protocol/tcpip-four-model.png)
 
 TCP 报文包 = TCP 头信息 + TCP 数据体，而在 TCP 头信息中包含了 6 种控制位（上图红色框中），这六种标志位就代表着 TCP 连接的状态：
 
@@ -51,7 +51,7 @@ TCP 报文包 = TCP 头信息 + TCP 数据体，而在 TCP 头信息中包含了
 
 TCP 建立连接过程 --- 三次握手
 
-![](https://blog.tommyyang.cn/img/protocal/tcpip-3times-shakehands.png)
+![](https://blog.tommyyang.cn/img/protocol/tcpip-3times-shakehands.png)
 
 **过程说明**：
 - 客户端发送位码为 syn＝1,随机产生 seq number=1234567 的数据包到服务器，服务器由SYN=1知道客户端要求建立联机（客户端：我要连接你）
@@ -72,7 +72,7 @@ TCP 建立连接过程 --- 三次握手
 
 TCP 数据体，也就是 HTTP 请求报文。结构如下：
 
-![](https://blog.tommyyang.cn/img/protocal/http-req.png)
+![](https://blog.tommyyang.cn/img/protocol/http-req.png)
 
 ### HTTP 请求实例
 
@@ -122,7 +122,7 @@ HTTP 响应报文结构与请求报文结构类似，包括：
 
 结构如下：
 
-![](https://blog.tommyyang.cn/img/protocal/http-resp.png)
+![](https://blog.tommyyang.cn/img/protocol/http-resp.png)
 
 ### 响应状态码
 |  |  类别  |   原因短语   |
@@ -199,7 +199,7 @@ Content-Encoding: gzip
 
 TCP 断开连接过程 --- 四次挥手结构图如下：
 
-![](https://blog.tommyyang.cn/img/protocal/tcpip-4times-wave.png)
+![](https://blog.tommyyang.cn/img/protocol/tcpip-4times-wave.png)
 
 在 TCP 连接建立的时候，讲到了标志位：**FIN 表示通知对方自身要断开连接了**。
 

@@ -96,7 +96,7 @@ public class BigFileWriter1 {
 
 ```
 
-经过上述代码改进后，代码效率基本可以了，但是由于对源码不熟悉，如果专业的人看到这段代码，会觉得我们比较业余，因为那个 synchronized 是抢眼且多余的，在专业的人看来会非常的不舒服的。由于 IO 操作是我们日常编程中使用到最多的 API，但是我们确对源码是那么的不熟悉。
+经过上述代码改进后，代码效率基本可以了，但是由于对源码不熟悉，如果专业的人看到这段代码，会觉得我们比较业余，因为那个 synchronized 是抢眼且多余的，在专业的人看来会非常的不舒服的。由于 IO 操作是我们日常编程中使用到最多的 API，但是我们却对源码是那么的不熟悉。
 
 ## JDK 中 Writer 源码分析
 我们先来看看 Writer 的构造方法：
@@ -136,7 +136,7 @@ protected Writer(Object lock) {
 
 ```
 
-从以上源码可以看出，Writer 里面关键的流部门，都会有 lock 锁进行同步；所以，对于同一个 writer instance 是线程安全的；所以我们写同一个文件的时候使用同一个 writer instance 是线程安全的。也就是说我们使用的 Writer、FileWriter、BufferedWriter 是线程安全的。
+从以上源码可以看出，Writer 里面关键的流部分，都会有 lock 锁进行同步；所以，对于同一个 writer instance 是线程安全的；所以我们写同一个文件的时候使用同一个 writer instance 是线程安全的。也就是说我们使用的 Writer、FileWriter、BufferedWriter 是线程安全的。
 
 具体的 write 方法源码分析如下：
 
@@ -160,7 +160,7 @@ public void write(String str, int off, int len) throws IOException {
 
 ```  
 
-在初始话 Writer Instance 的时候，我们会确定一个同步锁对象，所以只要我们使用的是一个 Writer 对象，则可以保证线程安全。
+在初始化 Writer Instance 的时候，我们会确定一个同步锁对象，所以只要我们使用的是一个 Writer 对象，则可以保证线程安全。
 
 ## 改进版本二
 通过以上源码分析，我们可以很清楚地改进最优的代码如下：

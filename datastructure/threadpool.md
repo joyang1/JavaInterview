@@ -52,7 +52,73 @@ Executors.newScheduledThreadPool() 创建了一个固定长度的线程池，而
 Executors.newWorkStealingPool() 创建了一个工作窃取池，具体地由 ForkJoinPool 构成；具体就是先把大任务 fork 成小任务，然后再把小任务的结果 join 起来，最后得到一个具体的结果。
 
 ### ThreadPoolExecutor 源码分析
-### 6 个参数
+
+#### 构造方法
+
+```java
+
+public class ThreadPoolExecutor extends AbstractExecutorService {
+
+    public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue<Runnable> workQueue) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             Executors.defaultThreadFactory(), defaultHandler);
+    }
+
+    public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue<Runnable> workQueue,
+                              ThreadFactory threadFactory) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             threadFactory, defaultHandler);
+    }
+
+    public ThreadPoolExecutor(int corePoolSize,
+                                  int maximumPoolSize,
+                                  long keepAliveTime,
+                                  TimeUnit unit,
+                                  BlockingQueue<Runnable> workQueue,
+                                  RejectedExecutionHandler handler) {
+            this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+                 Executors.defaultThreadFactory(), handler);
+    }
+
+    public ThreadPoolExecutor(int corePoolSize,
+                                  int maximumPoolSize,
+                                  long keepAliveTime,
+                                  TimeUnit unit,
+                                  BlockingQueue<Runnable> workQueue,
+                                  ThreadFactory threadFactory,
+                                  RejectedExecutionHandler handler) {
+            if (corePoolSize < 0 ||
+                maximumPoolSize <= 0 ||
+                maximumPoolSize < corePoolSize ||
+                keepAliveTime < 0)
+                throw new IllegalArgumentException();
+            if (workQueue == null || threadFactory == null || handler == null)
+                throw new NullPointerException();
+            this.acc = System.getSecurityManager() == null ?
+                    null :
+                    AccessController.getContext();
+            this.corePoolSize = corePoolSize;
+            this.maximumPoolSize = maximumPoolSize;
+            this.workQueue = workQueue;
+            this.keepAliveTime = unit.toNanos(keepAliveTime);
+            this.threadFactory = threadFactory;
+            this.handler = handler;
+    }
+
+}
+
+
+```
+
+#### 7 个参数
 - corePoolSize
 
     核心线程数，默认情况下核心线程会一直存活，即使处于闲置状态也不会受存 keepAliveTime 限制。除非将 allowCoreThreadTimeOut 设置为 true。
@@ -86,6 +152,39 @@ Executors.newWorkStealingPool() 创建了一个工作窃取池，具体地由 Fo
     ```
   
     通过线程工厂可以对线程的一些属性进行定制。
+    
+    默认工厂源码：
+    
+    ```java
+    
+    static class DefaultThreadFactory implements ThreadFactory {
+            private static final AtomicInteger poolNumber = new AtomicInteger(1);
+            private final ThreadGroup group;
+            private final AtomicInteger threadNumber = new AtomicInteger(1);
+            private final String namePrefix;
+    
+            DefaultThreadFactory() {
+                SecurityManager s = System.getSecurityManager();
+                group = (s != null) ? s.getThreadGroup() :
+                                      Thread.currentThread().getThreadGroup();
+                namePrefix = "pool-" +
+                              poolNumber.getAndIncrement() +
+                             "-thread-";
+            }
+    
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(group, r,
+                                      namePrefix + threadNumber.getAndIncrement(),
+                                      0);
+                if (t.isDaemon())
+                    t.setDaemon(false);
+                if (t.getPriority() != Thread.NORM_PRIORITY)
+                    t.setPriority(Thread.NORM_PRIORITY);
+                return t;
+            }
+    }
+  
+    ```
     
 - handler
     

@@ -407,7 +407,12 @@ do {
 
 
 ### 锁机制
-#### 共享锁和排它锁
+InnoDB 实现了两种类型的行级锁：
+**共享锁（也称为 S 锁）**：允许事务读取一行数据。
+可以使用 SQL 语句 select * from tableName where … lock in share mode; 手动加 S 锁。
+
+**独占锁（也称为 X 锁）**：允许事务删除或更新一行数据。
+可以使用 SQL 语句 select * from tableName where … for update; 手动加 X 锁。
 
 #### 锁粒度
 

@@ -12,7 +12,7 @@
 
 ## :coffee: [Java8 篇](/java8)
 
-## [数据结构篇](/datastructure)
+## :house_with_garden: [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
 - [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
   * Queue

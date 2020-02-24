@@ -8,9 +8,9 @@
 
 **为开源贡献自己的一份力量。**
 
-## [JVM 篇](/jvm)
+## :blue_book: [JVM 篇](/jvm)
 
-## [Java8 篇](/java8)
+## :coffee: [Java8 篇](/java8)
 
 ## [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
@@ -22,7 +22,7 @@
   * LinkedBlockingQueue
   * LinkedBlockingDeque
 
-## [代码篇](/codeinterview)
+## :scroll: [代码篇](/codeinterview)
 主要介绍 LeetCode 上面的算法题目，以及面试过程中遇到的实际编码问题总结。
 
 ### [排序相关](/sortpro)
@@ -37,21 +37,21 @@
 - [桶排序](/sortpro/9.bucketSort.md)
 - [基数排序](/sortpro/10.radixSort.md)
 
-## [Lock 篇](/lock)
+## :lock: [Lock 篇](/lock)
 
-## [IO 篇](/io)
+## :file_folder: [IO 篇](/io)
   
-## [大数据篇](/bigdata)
+## :computer: [大数据篇](/bigdata)
 
-## [架构篇](/architecture)
+## :floppy_disk: [架构篇](/architecture)
 
-## [关键字篇](/keywords)
+## :abcd: [关键字篇](/keywords)
 - [transient](/keywords/transient.md)
 - [volatile](/keywords/volatile.md)
 
-## [web 篇](/web)
+## :earth_asia: [web 篇](/web)
 
-## [书单篇](/books)
+## :books: [书单篇](/books)
 各种编程类书籍整理。大家可以直接下载阅读，增长自己编程技术。
   
   

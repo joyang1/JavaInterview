@@ -405,6 +405,167 @@ do {
 
 通过上述描述可以看出，Read Uncommitted 这种级别，数据库一般都不会用，而且任何操作都不会加锁。
 
+#### MySQL 事务级别详解
+以下信息都是针对 MySQL 8.0 版本进行测试。
+
+新建一张测试表 demo，SQL 如下：
+
+```sql
+
+CREATE TABLE `demo` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(64) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'demo name',
+  `author` varchar(64) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'demo author',
+  PRIMARY KEY (`ID`),
+  KEY `IX_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+```
+
+`查看 MySQL 当前事务级别`：select @@session.transaction_isolation;
+
+**未提交读（Read Uncommitted）**
+
+该隔离级别的事务会读到其它未提交事务的数据，此现象也称之为**脏读**。
+
+准备数据：
+
+```sql
+
+SET @@session.transaction_isolation = 'READ-UNCOMMITTED';
+
+insert into demo(name, author) values('name1', 'tommy');
+
+```
+
+- 准备两个终端，MySQL 终端 1 和 MySQL 终端 2，再准备一张测试表 demo，写入一条测试数据并调整隔离级别为 Read Uncommitted，任意一个终端执行即可。
+
+- 登录 MySQL 终端 1，开启一个事务，将 ID 为 1 对应的 name1 的记录更新为 name2。
+    
+    > begin; <br>
+    update demo set name = 'name2' where id = 1; <br>
+    select * from demo; -- 此时看到一条 name 为 name2 的记录
+
+- 登录 MySQL 终端 2，开启一个事务后查看表中的数据。
+    
+    >use demo; <br>
+     begin; <br>
+     select * from demo; -- 此时看到一条 name 为 name2 的记录
+
+
+最后一步读取到了 MySQL 终端 1 中未提交的事务（没有 commit 提交动作），即产生了**脏读**，大部分业务场景都不允许**脏读**出现，但是此隔离级别下数据库的并发是最好的。由于会出现**脏读**，所以这种隔离级别一般数据库都不会使用。
+
+
+**已提交读（Read Committed）** 
+                                   
+一个事务可以读取另一个已提交的事务，多次读取会造成不一样的结果，此现象称为不可重复读问题，Oracle 和 SQL Server 的默认隔离级别，但是不是 MySQL 的默认隔离级别。
+
+准备数据：
+
+```sql
+
+SET @@session.transaction_isolation = 'READ-COMMITTED';
+
+insert into demo(name, author) values('name1', 'tommy');
+
+```
+
+- 准备两个终端，MySQL 终端 1 和 MySQL 终端 2，再准备一张测试表 demo，写入一条测试数据并调整隔离级别为 Read Committed，任意一个终端执行即可。
+
+- 登录 MySQL 终端 1，开启一个事务，将 ID 为 1 对应的 name1 的记录更新为 name2。
+    
+    > begin; <br>
+      update demo set name = 'name2' where id = 1; <br>
+      select * from demo; -- 此时看到一条 name 为 name2 的记录
+
+- 登录 MySQL 终端 2，开启一个事务后查看表中的数据。
+    
+    > use demo; <br>
+      begin; <br>
+      select * from demo; -- 此时看到一条 name 为 name1 的记录
+
+- 切换 MySQL 终端 1，提交事务。
+    
+    > commit;
+
+- 切换 MySQL 终端 2。
+                                     
+    > select * from test; -- 此时看到一条 name 为 name2 的记录
+
+MySQL 终端 2 在开启了一个事务之后，在第一次读取 demo 表（此时 MySQL 终端 1 的事务还未提交）时 name 的值为 'name1'，在第二次读取 demo 表（此时 MySQL 终端 1 的事务已经提交）时 name 列的值 'name1' 已经变为 'name2'，说明在此隔离级别下只能读取到已提交的事务。
+
+
+**可重复读（Repeated Read）**
+
+该隔离级别是 MySQL 默认的隔离级别，在同一个事务里，select 的结果是事务开始时时间点的状态，因此，同样的 select 操作读到的结果会是一致的，但是，会有**幻读**现象。MySQL 的 InnoDB 引擎可以通过 next-key locks（行锁） 机制来避免**幻读**。使用行锁来避免**幻读**会在后续锁的介绍中进行解释。
+
+准备数据：
+
+```sql
+
+SET @@session.transaction_isolation = 'REPEATABLE-READ';
+
+```
+
+- 准备两个终端，MySQL 终端 1 和 MySQL 终端 2，再准备一张测试表 demo，写入一条测试数据并调整隔离级别为 Repeated Read，任意一个终端执行即可。
+
+- 登录 MySQL 终端 1，开启一个事务。
+    
+    > begin; <br>
+      select * from demo; -- 无记录
+
+- 登录 MySQL 终端 2，开启一个事务后查看表中的数据。
+    
+    > begin; <br>
+      select * from demo; -- 无记录
+
+- 切换 MySQL 终端 1，提交事务。
+
+    > insert into demo(id, name, author) values(1, 'name1', 'tommy'); <br>
+      commit;
+
+- 切换 MySQL 终端 2。
+    
+    > select * from demo; --此时查询还是无记录
+    
+    以上可以证明，在该隔离级别下已经读取不到别的已提交的事务，如果想看到 MySQL 终端 1 提交的事务，在 MySQL 终端 2 将当前事务提交后再次查询就可以读取到 MySQL 终端 1 提交的事务。我们接着实验，看看在该隔离级别下是否会存在别的问题。
+   
+- 此时接着在 MySQL 终端 2 插入一条数据。
+    
+    > insert into demo(id, name, author) values(1, 'name1', 'tommy'); Duplicate entry '1' for key 'PRIMARY'，主键冲突。
+             
+    这时你肯定会有疑问，明明在上一步没有数据，为什么在这里会报错呢？其实这就是该隔离级别下可能产生的问题，MySQL 称之为幻读。注意我在这里强调的是 MySQL 数据库，Oracle 数据库对于幻读的定义可能有所不同。
+
+
+**可串行化（Serializable）**
+
+在该隔离级别下事务都是串行顺序执行的，MySQL 数据库的 InnoDB 引擎会给读操作隐式加一把读共享锁，从而避免了脏读、不可重读复读和幻读问题。
+
+准备数据：
+
+```sql
+
+SET @@session.transaction_isolation = 'SERIALIZABLE';
+
+```
+
+- 准备两个终端，MySQL 终端 1 和 MySQL 终端 2，再准备一张测试表 demo，写入一条测试数据并调整隔离级别为 Serializable，任意一个终端执行即可。
+
+- 登录 MySQL 终端 1，开启一个事务，并写入一条数据。
+    
+    > begin; <br>
+      insert into demo(id, name, author) values(1, 'name1', 'tommy');
+
+- 登录 MySQL 终端 2，开启一个事务。
+
+    > begin; <br>
+      select * from test; -- 此时会一直卡住
+
+- 立马切换到 MySQL 终端 1,提交事务。
+    
+    > commit;
+
+一旦事务提交，MySQL 终端 2 会立马返回 ID 为 1 的记录，否则会一直卡住，直到超时，其中超时参数是由 innodb_lock_wait_timeout 控制。该隔离级别的数据库并发能力最弱，因为每条 select 语句都会加锁。
 
 ### 锁机制
 InnoDB 实现了两种类型的行级锁：

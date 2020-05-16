@@ -18,6 +18,11 @@
 | Java8 实战.pdf | [下载](https://pan.baidu.com/s/1y5m1hgn9cJT7pyE5qI9UuQ) | og1w |
 | 深入理解 Java 虚拟机第二版.pdf | [下载](https://pan.baidu.com/s/1mFE-B03b5Dwuz3_CJgHA7g) | c1j1 |
 
+## 算法
+|   书名  |   链接  |   提取码    | 
+| :----: | :----: |   :----:   | 
+| 编程珠玑（第 2 版）.pdf | [下载](https://pan.baidu.com/s/174v9WNIHBFpAxmy9uCYX-g) | 5698 |
+
 ## 架构
 |   书名  |   链接  |   提取码    | 
 | :----: | :----: |   :----:   | 

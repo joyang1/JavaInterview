@@ -23,3 +23,6 @@
 - [MySQL](mysql.md)
 - [Redis](redis.md)
 - [ElasticSearch](elasticSearch.md)
+
+## 推荐系统
+- [推荐系统](recommend_system.md)

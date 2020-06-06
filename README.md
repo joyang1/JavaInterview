@@ -43,6 +43,8 @@
   
 ## :computer: [大数据篇](/bigdata)
 
+## :earth_asia: [机器学习](/machinelearning)
+
 ## :floppy_disk: [架构篇](/architecture)
 
 ## :abcd: [关键字篇](/keywords)

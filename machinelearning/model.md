@@ -360,7 +360,6 @@ def majority_cnt(class_list):
 ```
 
 
-
 ## GBDT
 GBDT: Gradient Boost Decision Tree。DT－Decision Tree决策树，GB是Gradient Boosting，是一种学习策略，GBDT的含义就是用Gradient Boosting的策略训练出来的DT模型。可以处理二分类问题。
 
@@ -369,5 +368,14 @@ GBDT: Gradient Boost Decision Tree。DT－Decision Tree决策树，GB是Gradient
 
 
 ## XGBoost
+### 分类树与回归树
+XGBoost是以CART回归树作为基本分类器。
+分类树：分类树的样本输出都是以类别的形式，比如说判断用户会不会购买华为Mate40，判断西瓜是甜还是不甜。
+
+回归树：回归树的样本输出是数值的形式，比如给某人发放房屋贷款的数额，给某人发放的红包金额。
+
+### Boost介绍
+Boost可以用于回归和分类问题，它每一步会产生一个弱分类器 (如决策树)，然后通过加权累加起来变成一个强分类器。比如每一步都会产生一个f(x)，F(x)=sum(fi(x))，其实就是一堆分类器通过加权合并成一个强分类器。
+
 
 ## Random Forests

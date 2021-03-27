@@ -2,7 +2,7 @@
 异常就是有异于常态，和正常情况不一样，有错误出现。在java中，阻止当前方法或作用域的情况，称之为异常。
 
 ## 异常分类
-![异常分类图](img/exception_category.png)
+![异常分类图](https://cdn.jsdelivr.net/gh/filess/img6@main/2021/03/27/1616860311636-a2466f2e-6bb2-437e-bd71-b2124af3fd89.png)
 
 ## Exception具体实现
 在系统开发中，平时经常需要使用的两种异常，一种是需要检查(checked)的，一种是不需要检查(unchecked)的。

@@ -68,5 +68,5 @@
 
 **欢迎关注个人公众号，每天更新原创技术好文**：
 
-![Tommy 学习录](mymp.jpeg)
+![Tommy 学习录](https://cdn.jsdelivr.net/gh/filess/img6@main/2021/03/28/1616861111098-e2ab6607-2144-422c-9540-932a44590d1c.jpeg)
 

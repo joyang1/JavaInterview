@@ -10,7 +10,7 @@
 
 ## :blue_book: [JVM 篇](/jvm)
 
-## :coffee: [Java8 篇](/java8)
+## :coffee: [Java 基础知识篇](/java_base)
 
 ## :house_with_garden: [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)

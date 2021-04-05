@@ -1,5 +1,8 @@
 package cn.tommyyang.designpatterns.duckgame;
 
+import cn.tommyyang.designpatterns.duckgame.behavior.FlyBehavior;
+import cn.tommyyang.designpatterns.duckgame.behavior.QuackBehavior;
+
 /**
  * 野鸭类
  *
@@ -9,6 +12,11 @@ package cn.tommyyang.designpatterns.duckgame;
  * @File : MallardDuck.java
  */
 public class MallardDuck extends Duck {
+
+    public MallardDuck(FlyBehavior flyBehavior, QuackBehavior quackBehavior) {
+        super(flyBehavior, quackBehavior);
+    }
+
     /**
      * 具体实现鸭子外观
      */

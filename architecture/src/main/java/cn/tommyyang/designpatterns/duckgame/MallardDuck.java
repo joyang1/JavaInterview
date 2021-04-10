@@ -13,6 +13,9 @@ import cn.tommyyang.designpatterns.duckgame.behavior.QuackBehavior;
  */
 public class MallardDuck extends Duck {
 
+    /**
+     * 构造器
+     */
     public MallardDuck(FlyBehavior flyBehavior, QuackBehavior quackBehavior) {
         super(flyBehavior, quackBehavior);
     }

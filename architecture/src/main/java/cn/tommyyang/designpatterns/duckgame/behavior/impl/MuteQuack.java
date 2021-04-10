@@ -11,8 +11,10 @@ import cn.tommyyang.designpatterns.duckgame.behavior.QuackBehavior;
 public class MuteQuack implements QuackBehavior {
     /**
      * 实现 quack 方式
+     * 不能叫
      */
     public void quack() {
         // nothing
+        System.out.println("no quack");
     }
 }

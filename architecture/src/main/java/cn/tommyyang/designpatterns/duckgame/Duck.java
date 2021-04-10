@@ -27,8 +27,8 @@ public abstract class Duck {
     /**
      * 鸭子的叫声
      */
-    public void quack() {
-        System.out.println("嘎嘎叫");
+    public void performQuack() {
+        this.quackBehavior.quack();
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class Duck {
      * 执行飞行行为
      */
     public void performFly() {
-
+        this.flyBehavior.fly();
     }
 
     /**

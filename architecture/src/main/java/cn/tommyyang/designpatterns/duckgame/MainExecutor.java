@@ -1,4 +1,4 @@
-package cn.tommyyang.designpatterns;
+package cn.tommyyang.designpatterns.duckgame;
 
 import cn.tommyyang.designpatterns.duckgame.Duck;
 import cn.tommyyang.designpatterns.duckgame.RubberDuck;

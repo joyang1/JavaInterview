@@ -105,6 +105,70 @@ public class MallardDuck extends Duck {
 
 张三认为，如果团队接受了这个项目，那工作就是建立一个应应用，利用 WeatherData 对象取得数据（由公司兄弟团队去和气象站对接），并更新三个布告板：当前状况、气象统计、天气预报。
 
+张三团队开始了工作，第二天由公司兄弟团队提供的获取相关气象数据的 WeatherData 类，类图如下：
+
+下面看一下实现的反面案例：针对具体实现编程。
+具体代码在该项目的位置：[JavaInterview](https://github.com/joyang1/JavaInterview)；
+JavaInterview/architecture/src/main/java/cn.tommyyang.designpatterns.observable.WeatherData。
+
+```java
+
+public class WeatherData {
+    /**
+     * 温度
+     */
+    private float temperature;
+
+    /**
+     * 湿度
+     */
+    private float humidity;
+
+    /**
+     * 气压
+     */
+    private float pressure;
+
+    public float getTemperature() {
+        return this.temperature;
+    }
+
+    public float getHumidity() {
+        return this.humidity;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+
+    /**
+     * 一旦气象测量更新，此方法会被调用
+     */
+    public void measurementsChanged() {
+        float temp = getTemperature();
+        float humidity = getHumidity();
+        float pressure = getPressure();
+
+        // 布告板数据更新
+        // 针对具体的实现编程，导致后续增删布告板时必须修改程序
+        CurrentConditionsDisplay currentConditionsDisplay = new CurrentConditionsDisplay();
+        currentConditionsDisplay.update(temp, humidity, pressure);
+    }
+}
+
+```
+回故下上一篇讲解的一些设计原则：
+- 找出应用中可能需要变化之处，把他们独立出来，不要和那些不需要变化的代码混在一起。
+- 针对接口编程，而不是针对实现编程。
+- 多用组合，少用继承。
+
+不难发现上面的代码非常*垃圾*。
+
+下面由首席架构师张三带大家使用观察者模式来实现该工程。
+
+`观察者模式`：定义了对象之间的一对多依赖，这样一来，当一个对象改变状态时，它的所有依赖者都会收到通知并自动更新。
+张三画了一张简易的观察者模式图如下：
+
 ## 装饰模式
 
 ## 工厂模式

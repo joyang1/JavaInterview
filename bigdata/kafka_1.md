@@ -12,7 +12,7 @@ kafka 的 message 是以 topic 为基本单位，不同 topic 之间是相互独
 同一个 topic 的不同 partition 可以分布在不同的 broker 上，这正是分布式的设计。
 partition 是以文件夹的形式存储在 broker 机器上。
 topic 与 partition 的关系如下：
-<img src = "https://blog.tommyyang.cn/img/bigdata/kafka/topic.png">
+<img src = "https://github.com/joyang1/tommy.github.io/blob/gh-pages/img/bigdata/kafka/topic.png">
 
 ## Partition中的文件
 ### segment file

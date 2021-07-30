@@ -23,17 +23,17 @@ topic 与 partition 的关系如下：
 2. 自0.10.0.1开始的kafka segment file组成：多了一部分，还有 .timeindex 索引文件，基于时间的索引文件；目前支持的时间戳类型有两种： CreateTime 和 LogAppendTime 前者表示 producer 创建这条消息的时间；后者表示 broker 接收到这条消息的时间(严格来说，是 leader broker 将这条消息写入到 log 的时间)
 3. segment file 命名规则：partition 的第一个 segment 从0开始，后续每个 segment 文件名为上一个 segment 文件最后一条消息的  offset, ofsset 的数值最大为64位（long 类型），20位数字字符长度，没有数字用0填充。如下图所示：
 老版本 segment file 结构: 
-<img src = "https://blog.tommyyang.cn/img/bigdata/kafka/segment.png">
+<img src = "https://github.com/joyang1/tommy.github.io/blob/gh-pages/img/bigdata/kafka/segment.png">
 新版本 segment file 结构:
-<img src = "https://blog.tommyyang.cn/img/bigdata/kafka/new_segment.png">
+<img src = "https://github.com/joyang1/tommy.github.io/blob/gh-pages/img/bigdata/kafka/new_segment.png">
 
 4. 关于 segment file 中 index 索引文件与 data 文件对应关系图，这里我们借用网上的一个图片，如下所示：
-<img src = "https://blog.tommyyang.cn/img/bigdata/kafka/index.png">
+<img src = "https://github.com/joyang1/tommy.github.io/blob/gh-pages/img/bigdata/kafka/index.png">
 
 5. segment的索引文件中存储着大量的元数据，数据文件中存储着大量消息，索引文件中的元数据指向对应数据文件中的 message 的物理偏移地址。以索引文件中的6，1407为例，在数据文件中表示第6个 message（在全局 partition 表示第368775个 message），以及该消息的物理偏移地址为1407。
 
 6. Kafka message 结构如下图:
-<img src = "https://blog.tommyyang.cn/img/bigdata/kafka/message.png">
+<img src = "https://github.com/joyang1/tommy.github.io/blob/gh-pages/img/bigdata/kafka/message.png">
 
 `注`：.index文件的第一个数是 message 相对 offset，后面的数字是该消息的物理偏移地址。
 

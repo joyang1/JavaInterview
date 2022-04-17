@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>sortpro</module>
-        <module>keywords</module>
         <module>web</module>
         <module>lock</module>
         <module>bigdata</module>
@@ -19,7 +18,8 @@
         <module>test</module>
         <module>datastructure</module>
         <module>architecture</module>
-        <module>java8</module>
+        <module>javabase/java8</module>
+        <module>javabase/keywords</module>
     </modules>
 
 

@@ -10,7 +10,7 @@
 
 ## :blue_book: [JVM 篇](/jvm)
 
-## :coffee: [Java 基础知识篇](/java_base)
+## :coffee: [Java 基础知识篇](/javabase)
 
 ## :house_with_garden: [数据结构篇](/datastructure)
 - [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
@@ -47,9 +47,9 @@
 
 ## :floppy_disk: [架构篇](/architecture)
 
-## :abcd: [关键字篇](/keywords)
-- [transient](/keywords/transient.md)
-- [volatile](/keywords/volatile.md)
+## :abcd: [关键字篇](/javabase/keywords)
+- [transient](/javabase/keywords/transient.md)
+- [volatile](/javabase/keywords/volatile.md)
 
 ## :earth_asia: [web 篇](/web)
 

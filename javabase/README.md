@@ -1,6 +1,9 @@
 # Java 基础知识
 
 ## 基础
+### Integer类
+
+
 ### Calendar类
 > 添加天数：<font color="red">DAY_OF_MONTH、DAY_OF_YEAR、DAY_OF_WEEK、DAY_OF_WEEK_IN_MONTH</font>的区别
 
@@ -11,7 +14,7 @@
 - 同样，`DAY_OF_WEEK`，用来获得当前日期是一周的第几天；`DAY_OF_WEEK_IN_MONTH`，用来获取 day 所在的周是这个月的第几周
 
 
-## [Java8 篇](/java8)
-
 ## [异常篇](exception.md)
+
+## [Java8 篇](java8)
 

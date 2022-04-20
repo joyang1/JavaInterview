@@ -8,6 +8,7 @@ service Greeter {
 
 message Request {
 	string name = 1;
+	uint32 age  = 2;
 }
 
 message Response {

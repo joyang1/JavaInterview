@@ -67,9 +67,9 @@ public class GrpcServer {
         public void hello(GreeterOuterClass.Request request, StreamObserver<GreeterOuterClass.Response> responseObserver) {
             try {
                 GreeterOuterClass.Response response = GreeterOuterClass.Response.newBuilder()
-                        .setMsg("hello" + request.getName()).build();
-                //responseObserver.onNext(response);
-                //responseObserver.onCompleted();
+                        .setMsg("hello" + request.getName() + "; age:" + request.getAge()).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
                 throw new Exception("error");
             } catch (Exception e){
                 Metadata metadata = new Metadata();

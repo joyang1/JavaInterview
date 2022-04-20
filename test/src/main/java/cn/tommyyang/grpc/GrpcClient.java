@@ -32,6 +32,7 @@ public class GrpcClient {
         GreeterOuterClass.Request request = GreeterOuterClass.Request
                 .newBuilder()
                 .setName("aaa")
+                .setAge(1)
                 .build();
 
         try {
@@ -54,7 +55,7 @@ public class GrpcClient {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        GrpcClient client = new GrpcClient("localhost", 50051);
+        GrpcClient client = new GrpcClient("127.0.0.1", 50051);
         client.greet();
     }
 

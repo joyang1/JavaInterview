@@ -27,6 +27,11 @@ public final class GreeterOuterClass {
      */
     com.google.protobuf.ByteString
         getNameBytes();
+
+    /**
+     * <code>uint32 age = 2;</code>
+     */
+    int getAge();
   }
   /**
    * Protobuf type {@code cn.tommyyang.grpc.protobuf.Request}
@@ -42,6 +47,7 @@ public final class GreeterOuterClass {
     }
     private Request() {
       name_ = "";
+      age_ = 0;
     }
 
     @java.lang.Override
@@ -72,6 +78,11 @@ public final class GreeterOuterClass {
               java.lang.String s = input.readStringRequireUtf8();
 
               name_ = s;
+              break;
+            }
+            case 16: {
+
+              age_ = input.readUInt32();
               break;
             }
             default: {
@@ -140,6 +151,15 @@ public final class GreeterOuterClass {
       }
     }
 
+    public static final int AGE_FIELD_NUMBER = 2;
+    private int age_;
+    /**
+     * <code>uint32 age = 2;</code>
+     */
+    public int getAge() {
+      return age_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -157,6 +177,9 @@ public final class GreeterOuterClass {
       if (!getNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
+      if (age_ != 0) {
+        output.writeUInt32(2, age_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -168,6 +191,10 @@ public final class GreeterOuterClass {
       size = 0;
       if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
+      }
+      if (age_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(2, age_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -187,6 +214,8 @@ public final class GreeterOuterClass {
       boolean result = true;
       result = result && getName()
           .equals(other.getName());
+      result = result && (getAge()
+          == other.getAge());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -200,6 +229,8 @@ public final class GreeterOuterClass {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
+      hash = (37 * hash) + AGE_FIELD_NUMBER;
+      hash = (53 * hash) + getAge();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -335,6 +366,8 @@ public final class GreeterOuterClass {
         super.clear();
         name_ = "";
 
+        age_ = 0;
+
         return this;
       }
 
@@ -362,6 +395,7 @@ public final class GreeterOuterClass {
       public cn.tommyyang.grpc.protobuf.GreeterOuterClass.Request buildPartial() {
         cn.tommyyang.grpc.protobuf.GreeterOuterClass.Request result = new cn.tommyyang.grpc.protobuf.GreeterOuterClass.Request(this);
         result.name_ = name_;
+        result.age_ = age_;
         onBuilt();
         return result;
       }
@@ -413,6 +447,9 @@ public final class GreeterOuterClass {
         if (!other.getName().isEmpty()) {
           name_ = other.name_;
           onChanged();
+        }
+        if (other.getAge() != 0) {
+          setAge(other.getAge());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -508,6 +545,32 @@ public final class GreeterOuterClass {
   checkByteStringIsUtf8(value);
         
         name_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int age_ ;
+      /**
+       * <code>uint32 age = 2;</code>
+       */
+      public int getAge() {
+        return age_;
+      }
+      /**
+       * <code>uint32 age = 2;</code>
+       */
+      public Builder setAge(int value) {
+        
+        age_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 age = 2;</code>
+       */
+      public Builder clearAge() {
+        
+        age_ = 0;
         onChanged();
         return this;
       }
@@ -1134,10 +1197,11 @@ public final class GreeterOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\rgreeter.proto\022\032cn.tommyyang.grpc.proto" +
-      "buf\"\027\n\007Request\022\014\n\004name\030\001 \001(\t\"\027\n\010Response" +
-      "\022\013\n\003msg\030\001 \001(\t2_\n\007Greeter\022T\n\005Hello\022#.cn.t" +
-      "ommyyang.grpc.protobuf.Request\032$.cn.tomm" +
-      "yyang.grpc.protobuf.Response\"\000b\006proto3"
+      "buf\"$\n\007Request\022\014\n\004name\030\001 \001(\t\022\013\n\003age\030\002 \001(" +
+      "\r\"\027\n\010Response\022\013\n\003msg\030\001 \001(\t2_\n\007Greeter\022T\n" +
+      "\005Hello\022#.cn.tommyyang.grpc.protobuf.Requ" +
+      "est\032$.cn.tommyyang.grpc.protobuf.Respons" +
+      "e\"\000b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1156,7 +1220,7 @@ public final class GreeterOuterClass {
     internal_static_cn_tommyyang_grpc_protobuf_Request_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_cn_tommyyang_grpc_protobuf_Request_descriptor,
-        new java.lang.String[] { "Name", });
+        new java.lang.String[] { "Name", "Age", });
     internal_static_cn_tommyyang_grpc_protobuf_Response_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_cn_tommyyang_grpc_protobuf_Response_fieldAccessorTable = new

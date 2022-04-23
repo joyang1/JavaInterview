@@ -12,16 +12,6 @@
 
 ## :coffee: [Java 基础知识篇](/javabase)
 
-## :house_with_garden: [数据结构篇](/datastructure)
-- [StringBuilder和StringBuffer](/datastructure/stringbuilderandstringbuffer.md)
-- [BlockingQueue和BlockingDeque](/datastructure/blockingqueueanddeque.md)
-  * Queue
-  * Deque
-  * LinkedList
-  * ArrayBlockingQueue
-  * LinkedBlockingQueue
-  * LinkedBlockingDeque
-
 ## :scroll: [代码篇](/codeinterview)
 主要介绍 LeetCode 上面的算法题目，以及面试过程中遇到的实际编码问题总结。
 
@@ -46,10 +36,6 @@
 ## :earth_asia: [机器学习](/machinelearning)
 
 ## :floppy_disk: [架构篇](/architecture)
-
-## :abcd: [关键字篇](/javabase/keywords)
-- [transient](/javabase/keywords/transient.md)
-- [volatile](/javabase/keywords/volatile.md)
 
 ## :earth_asia: [web 篇](/web)
 

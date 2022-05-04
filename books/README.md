@@ -28,3 +28,8 @@
 | :----: | :----: |   :----:   | 
 | 微服务设计.pdf | [下载](https://pan.baidu.com/s/1uaCQhagPU1ElrC2zuBePdA) | bfir |
 | 大型网站技术架构.pdf | [下载](https://pan.baidu.com/s/1F_CpOz-0sspDjGktG1z3Yw) | wf1l |
+
+## 人工智能
+### 读书笔记
+#### A/B测试
+![A/B测试](https://github.com/JavaInterview/img/AB测试的.png)

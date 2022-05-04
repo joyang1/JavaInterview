@@ -13,7 +13,7 @@
 - G1 收集器
 
 按收集器的回收对象以及收集器之间的联系，可以参照下图一：
-<img src="https://blog.tommyyang.cn/img/java/jvm/jvm-garbage.png">
+<img src="https://joyang1.github.io/tommy.github.io/img/java/jvm/jvm-garbage.png">
 
 通过上图可以发现，Serial、ParNew、 Parallel Scavenge 是用来收集新生代的收集器，CMS、 Serial Old、Parallel Old 是用来收集老年代的收集器；然后 CMS 是不能和 Parallel Scavenge 结合起来用的，CMS 是可以和 Serial Old 联合起来收集老年代的。
 
@@ -22,7 +22,7 @@
 Serial 收集器是最基本、发展历史最悠久的收集器，（在JDK 1.3.1 之前）是虚拟机新生代收集的唯一选择。通过名字，大家也可以发现该收集器是一个单线程的收集器，但它的"单线程"的意义并不仅仅说明它只会使用一个 CPU 或 一条收集线程去完成垃圾收集工作，更重要的是在它进行收集时，必须暂停其它所有的工作线程，直到它收集结束。"Stop The World"就是该收集器的一个特点，这项工作是由虚拟机在后台自动发起和自动完成的，在用户不可见的情况下把用户正常工作的线程全部停掉，这对很多应用来说都是难以接受的。
 
 Serial 收集器的工作过程如下图二：
-<img src="https://blog.tommyyang.cn/img/java/jvm/serial_collector.png">
+<img src="https://joyang1.github.io/tommy.github.io/img/java/jvm/serial_collector.png">
 
 对于 "Stop The World" 带给用户的不良体验，虚拟机的设计者们表示完全理解，但是表示非常委屈："你妈妈在给你打扫房间的时候，肯定也会让你处在一个不会干扰她打扫的状态，比如坐在椅子上不动，或者到房间外面去，不然她一边打扫，你一边乱扔垃圾，这房间还能打扫完？"这确实是一个合情合理的矛盾，虽然垃圾收集这项工作听起来和打扫房间属于一个性质的，但实际上肯定还要比打扫房间复杂很多很多的。
 
@@ -34,7 +34,7 @@ Serial 收集器是虚拟机运行在 Client 模式下的默认新生代收集�
 ParNew 收集器其实就是 Serial 收集器的多线程版本。其它的与 Serial 收集器基本相同，也是 Stop The World，在实现上，这两种收集器也共用了相当多的代码。
 
 ParNew 收集器的工作过程如下图三：
-<img src="https://blog.tommyyang.cn/img/java/jvm/parnew_collector.png">
+<img src="https://joyang1.github.io/tommy.github.io/img/java/jvm/parnew_collector.png">
 
 ParNew 收集器是许多运行在 Server 模式下的虚拟机中首选的新生代收集器，其中有一个与性能无关但很重要的原因，除了 Serial 收集器外，目前只有它能与 CMS 收集器配合工作。 CMS 收集器是在 JDK 1.5时期推出的一款真正意义上的并发（Concurrent）收集器，它第一次实现了让垃圾收集器与用户线程（基本上）同时工作，用前面的例子来说就是做到了在你妈妈打扫房间的同时你还能一边往地上扔垃圾。
 

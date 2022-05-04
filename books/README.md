@@ -32,4 +32,4 @@
 ## 人工智能
 ### 读书笔记
 #### A/B测试
-![A/B测试](https://github.com/JavaInterview/img/AB测试的.png)
+![A/B测试](img/AB测试的.png)

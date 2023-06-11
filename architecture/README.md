@@ -29,7 +29,11 @@
 - [Redis](redis.md)
 - [ElasticSearch](elasticSearch.md)
 - MongoDB
+
+## 大数据
+- Hadoop
 - Hive
+- Spark
 
 ## 推荐系统
 - [推荐系统](recommend_system.md)

@@ -18,10 +18,19 @@ public abstract class Duck {
         this.quackBehavior = quackBehavior;
     }
 
+    /**
+     * 名称
+     */
     private String name;
 
+    /**
+     * 飞行行为
+     */
     private FlyBehavior flyBehavior;
 
+    /**
+     * 呱呱叫行为
+     */
     private QuackBehavior quackBehavior;
 
     /**

@@ -14,6 +14,7 @@ public class FlyWithWay implements FlyBehavior {
     /**
      * 实现飞行行为
      */
+    @Override
     public void fly() {
         System.out.println("fly with way");
     }

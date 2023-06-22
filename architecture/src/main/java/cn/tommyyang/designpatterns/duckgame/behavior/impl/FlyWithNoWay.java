@@ -14,6 +14,7 @@ public class FlyWithNoWay implements FlyBehavior {
     /**
      * 不能飞行行为实现
      */
+    @Override
     public void fly() {
         System.out.println("no way to fly");
     }

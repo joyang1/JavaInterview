@@ -6,9 +6,10 @@ import java.io.IOException;
 
 /**
  * @author TommyYang on 2019-04-09
+ * 
+ * 使用说明
+ * run cmd: java -cp bigdata-1.0-SNAPSHOT.jar cn.tommyyang.bigfile.BigFile
  */
-
-//run cmd: java -cp bigdata-1.0-SNAPSHOT.jar cn.tommyyang.bigfile.BigFile
 public class BigFile {
 
     public static void main(String[] args) throws IOException {

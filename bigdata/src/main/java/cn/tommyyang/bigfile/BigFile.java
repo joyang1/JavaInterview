@@ -13,8 +13,8 @@ import java.io.IOException;
 public class BigFile {
 
     public static void main(String[] args) throws IOException {
-        //BigFileTool.readContent(args[0], args[1]);
         FileService fileService = new FileService("./smallfiles/sink-0.txt");
+        //BigFileTool.readContent(args[0], args[1]);
         fileService.countWords();
         System.out.println(fileService.getTreeMap());
         System.out.println(fileService.getTreeMap().firstEntry().getKey() + ":" + fileService.getTreeMap().firstEntry().getValue());

@@ -16,7 +16,7 @@
         <module>codeinterview</module>
         <module>io</module>
         <module>test</module>
-        <module>datastructure</module>
+        <module>javabase/datastructure</module>
         <module>architecture</module>
         <module>javabase/java8</module>
         <module>javabase/keywords</module>

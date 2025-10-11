@@ -8,6 +8,9 @@
 
 **为开源贡献自己的一份力量。**
 
+**欢迎关注个人公众号，每天更新原创技术好文**：
+![Tommy 学习录](./img/tommy学习录.png)
+
 ## :blue_book: [JVM 篇](/jvm)
 
 ## :coffee: [Java 基础知识篇](/javabase)
@@ -51,8 +54,4 @@
 有任何问题，或者好的建议，好的面试相关的题目都可以在这里面进行提交！
 
 有什么问题也可以在这里进行[讨论](https://github.com/joyang1/JavaInterview/issues/1)。
-
-**欢迎关注个人公众号，每天更新原创技术好文**：
-
-![Tommy 学习录](https://cdn.jsdelivr.net/gh/filess/img6@main/2021/03/28/1616861111098-e2ab6607-2144-422c-9540-932a44590d1c.jpeg)
 
